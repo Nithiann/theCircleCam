@@ -28,7 +28,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.nithiann.thecircle.presentation.ui.theme.TheCircleTheme
 import com.nithiann.thecircle.presentation.aboutpage.aboutScreen
-import com.nithiann.thecircle.presentation.videopage.videoScreen
+import com.nithiann.thecircle.presentation.videopage.VideoScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
                                         icon = { Icon(menuIcons[index], contentDescription = null)},
                                         label = {Text(text = menuItems[index],style = TextStyle(color = androidx.compose.material3.MaterialTheme.colorScheme.contentColorFor(
                                             androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer)) )},
-                                        selected = currentDestination?.hierarchy?.any { it.route == screen?.route } == true,
+                                        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                                         onClick = {
                                             navController.navigate(screen.route)
                                         }
@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
                     ) { innerPadding ->
                         NavHost(navController, startDestination = Screen.AboutScreen.route, Modifier.padding(innerPadding)) {
                             composable(Screen.AboutScreen.route) { aboutScreen(navController) }
-                            composable(Screen.LiveScreen.route) { videoScreen(navController) }
+                            composable(Screen.LiveScreen.route) { VideoScreen(navController) }
                         }
 
                     }

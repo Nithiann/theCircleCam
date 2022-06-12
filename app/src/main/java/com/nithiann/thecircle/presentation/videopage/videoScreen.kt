@@ -8,10 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
 @Composable
-fun videoScreen(navController: NavController) {
+fun VideoScreen(navController: NavController) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text(text = "Live page")
+        CameraView()
     }
 }
