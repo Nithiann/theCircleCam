@@ -1,4 +1,4 @@
-package com.nithiann.thecircle.ui.theme
+package com.nithiann.thecircle.presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
