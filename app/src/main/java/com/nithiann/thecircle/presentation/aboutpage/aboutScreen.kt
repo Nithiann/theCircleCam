@@ -1,5 +1,10 @@
 package com.nithiann.thecircle.presentation.aboutpage
 
 
-fun aboutScreen {
+
+import androidx.compose.runtime.Composable
+
+@Composable
+fun aboutScreen() {
+
 }
