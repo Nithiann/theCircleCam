@@ -3,7 +3,6 @@ package com.nithiann.thecircle.domain.use_case
 import com.nithiann.thecircle.common.Resource
 import com.nithiann.thecircle.domain.models.Contributor
 import com.nithiann.thecircle.domain.repository.AboutRepository
-import com.nithiann.thecircle.infrastructure.remote.dto.ContributorDTO
 import com.nithiann.thecircle.infrastructure.remote.dto.toContributor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
