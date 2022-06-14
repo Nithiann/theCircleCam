@@ -1,20 +1,16 @@
 package com.nithiann.thecircle.presentation.profilepage
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -26,8 +22,9 @@ fun profileScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(state = rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         profile();
         Text(
@@ -35,6 +32,19 @@ fun profileScreen(navController: NavController) {
             style = MaterialTheme.typography.headlineLarge,
             modifier = Modifier.padding(vertical = 16.dp),
         );
+        Text(
+            text= "Naam: Groen\n" +
+                    "Leeftijd: 12\n"+
+                    "Help: Plz send help\n",
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(top = 5.dp),
+            style = MaterialTheme.typography.bodyLarge
+            )
+        Text(
+            text= "",
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.bodyLarge,
+        )
     }
 
 }
@@ -45,7 +55,7 @@ fun profile(
     modifier : Modifier = Modifier
 ){
     Column(
-
+        modifier = Modifier.padding(top = 15.dp)
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_background),
