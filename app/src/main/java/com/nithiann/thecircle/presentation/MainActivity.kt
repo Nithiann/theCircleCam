@@ -35,6 +35,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.nithiann.thecircle.presentation.ui.theme.TheCircleTheme
 import com.nithiann.thecircle.presentation.aboutpage.aboutScreen
+import com.nithiann.thecircle.presentation.profilepage.profileScreen
 import com.nithiann.thecircle.presentation.videopage.VideoScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -65,7 +66,7 @@ class MainActivity : ComponentActivity() {
                     val menuItems = listOf("About me", "Live", "About us")
                     val menuIcons =
                         listOf(Icons.Filled.Person, Icons.Filled.Videocam, Icons.Filled.Group)
-                    val menu = listOf(Screen.AboutScreen, Screen.LiveScreen, Screen.AboutScreen)
+                    val menu = listOf(Screen.ProfileScreen, Screen.LiveScreen, Screen.AboutScreen)
 
                     Scaffold(
                         bottomBar = {
@@ -111,6 +112,7 @@ class MainActivity : ComponentActivity() {
                             startDestination = Screen.AboutScreen.route,
                             Modifier.padding(innerPadding)
                         ) {
+                            composable(Screen.ProfileScreen.route) { profileScreen(navController) }
                             composable(Screen.AboutScreen.route) { aboutScreen(navController) }
                             composable(Screen.LiveScreen.route) { VideoScreen(navController) }
                         }
