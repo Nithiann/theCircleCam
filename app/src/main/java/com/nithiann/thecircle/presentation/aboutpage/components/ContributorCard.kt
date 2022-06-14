@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import com.nithiann.thecircle.domain.models.Contributor
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun ContributorCard(contributor: Contributor) {
@@ -23,13 +25,12 @@ fun ContributorCard(contributor: Contributor) {
     ) {
 
         Row(
-            modifier = androidx.compose.ui.Modifier
+            modifier = Modifier
                 .width(360.dp)
                 .padding(20.dp)
 
         ) {
-            Text(contributor.firstName)
-            Text(text = contributor.lastName)
+            Text(contributor.firstName + " " + contributor.lastName, style = TextStyle(color = MaterialTheme.colorScheme.contentColorFor(MaterialTheme.colorScheme.primaryContainer), fontWeight = FontWeight.Bold))
         }
     }
 }
