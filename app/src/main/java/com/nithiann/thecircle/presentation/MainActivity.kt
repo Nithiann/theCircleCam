@@ -2,7 +2,10 @@ package com.nithiann.thecircle.presentation
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.drawable.shapes.Shape
 import android.os.Bundle
+import android.service.controls.actions.FloatAction
+import android.text.style.BackgroundColorSpan
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -11,24 +14,32 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.BottomNavigation
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.material.FabPosition
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Group
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Videocam
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -38,7 +49,8 @@ import com.nithiann.thecircle.presentation.aboutpage.aboutScreen
 import com.nithiann.thecircle.presentation.profilepage.profileScreen
 import com.nithiann.thecircle.presentation.videopage.VideoScreen
 import dagger.hilt.android.AndroidEntryPoint
-
+import kotlinx.coroutines.launch
+import androidx.compose.material.Text as Text1
 
 
 @AndroidEntryPoint
@@ -63,20 +75,17 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.primary
                 ) {
                     val navController = rememberNavController()
-                    val menuItems = listOf("About me", "Live", "About us")
                     val menuIcons =
-                        listOf(Icons.Filled.Person, Icons.Filled.Videocam, Icons.Filled.Group)
-                    val menu = listOf(Screen.ProfileScreen, Screen.LiveScreen, Screen.AboutScreen)
+                        listOf(Icons.Filled.Menu, Icons.Filled.Person)
+                    val menu = listOf(Screen.AboutScreen, Screen.ProfileScreen)
 
                     Scaffold(
                         bottomBar = {
-                            NavigationBar(
+                            BottomAppBar(
                                 modifier = Modifier
-                                    .fillMaxWidth(),
-                                containerColor = androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer,
-                                contentColor = androidx.compose.material3.MaterialTheme.colorScheme.contentColorFor(
-                                    androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer
-                                )
+                                    .height(65.dp),
+                                cutoutShape = CircleShape,
+                                elevation = 22.dp
                             ) {
                                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                                 val currentDestination = navBackStackEntry?.destination
@@ -86,24 +95,43 @@ class MainActivity : ComponentActivity() {
                                         icon = {
                                             Icon(
                                                 menuIcons[index],
-                                                contentDescription = null
-                                            )
-                                        },
-                                        label = {
-                                            Text(
-                                                text = menuItems[index], style = TextStyle(
-                                                    color = androidx.compose.material3.MaterialTheme.colorScheme.contentColorFor(
-                                                        androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer
-                                                    )
-                                                )
+                                                contentDescription = null,
+                                                tint = Color.White
                                             )
                                         },
                                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+
                                         onClick = {
                                             navController.navigate(screen.route)
                                         }
                                     )
                                 }
+                            }
+                        },
+                        floatingActionButtonPosition = FabPosition.Center,
+                        isFloatingActionButtonDocked = true,
+                        floatingActionButton = {
+                            FloatingActionButton(
+                                shape = CircleShape,
+                                onClick = {
+                                    Screen.LiveScreen.route?.let {
+                                        navController.navigate(it) {
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                    }
+                                    Screen.LiveScreen.route?.let { navController.navigate(it) }
+                                },
+                                contentColor = Color.Black
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Videocam,
+                                    contentDescription = "Add icon",
+                                    tint = Color.Black
+                                )
                             }
                         }
                     ) { innerPadding ->
