@@ -7,7 +7,7 @@ import javax.microedition.khronos.egl.EGLConfig
 
 class OpenGLRenderer : GLSurfaceView.Renderer {
     override fun onSurfaceCreated(gl: GL10, config: EGLConfig) {
-        GLES20.glClearColor(0.9f, 0.9f, 0.9f, 1f)
+
     }
 
     override fun onSurfaceChanged(gl: GL10, width: Int, height: Int) {}

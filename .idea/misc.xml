@@ -4,6 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Development/Kotlin/theCircleCam/app/src/main/res/layout/camera_layout.xml" value="0.1778115501519757" />
+        <entry key="..\:/Development/Kotlin/theCircleCam/app/src/main/res/layout/streaming_activity.xml" value="0.16979166666666667" />
+        <entry key="..\:/Development/Kotlin/theCircleCam/app/src/main/res/layout/streaming_fragment.xml" value="0.16979166666666667" />
+        <entry key="..\:/Development/Kotlin/theCircleCam/app/src/main/res/layout/texture_layout.xml" value="0.1703125" />
+        <entry key="..\:/Development/Kotlin/theCircleCam/app/src/main/res/layout/texture_view.xml" value="0.13125" />
       </map>
     </option>
   </component>

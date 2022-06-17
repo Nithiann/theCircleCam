@@ -1,9 +1,11 @@
 package com.nithiann.thecircle.presentation.videopage
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import com.pedro.rtmp.utils.ConnectCheckerRtmp
 
-class ConnectCheckerRtmp: ConnectCheckerRtmp {
+class ConnectCheckerRtmp(): ConnectCheckerRtmp {
     lateinit var streamingUrl: String
 
     override fun onConnectionSuccessRtmp() {
@@ -15,7 +17,7 @@ class ConnectCheckerRtmp: ConnectCheckerRtmp {
     }
 
     override fun onNewBitrateRtmp(bitrate: Long) {
-        TODO("Not yet implemented")
+        Log.i("Stream", "The bitrate is " + bitrate.toString())
     }
 
     override fun onAuthErrorRtmp() {
