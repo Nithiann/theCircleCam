@@ -27,10 +27,12 @@ fun ContributorCard(contributor: Contributor) {
         Row(
             modifier = Modifier
                 .width(360.dp)
-                .padding(20.dp)
+                .padding(20.dp),
+            Arrangement.SpaceBetween
 
         ) {
-            Text(contributor.firstName + " " + contributor.lastName, style = TextStyle(color = MaterialTheme.colorScheme.contentColorFor(MaterialTheme.colorScheme.primaryContainer), fontWeight = FontWeight.Bold))
+            Text(contributor.firstName + " " + contributor.lastName, style = TextStyle(color = MaterialTheme.colorScheme.contentColorFor(MaterialTheme.colorScheme.primaryContainer)))
+            Text(contributor.devTeam, style = TextStyle(fontWeight = FontWeight.Bold))
         }
     }
 }

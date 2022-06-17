@@ -32,7 +32,7 @@ fun aboutScreen(navController: NavController, viewModel: AboutPageViewModel = hi
 
     ) {
         state.contributors?.forEach { contributor ->
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.requiredHeight(20.dp))
             ContributorCard(contributor = contributor)
         }
     }
