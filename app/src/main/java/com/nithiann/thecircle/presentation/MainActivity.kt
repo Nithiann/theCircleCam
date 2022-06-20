@@ -1,6 +1,7 @@
 package com.nithiann.thecircle.presentation
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -24,6 +25,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
@@ -36,6 +38,7 @@ import androidx.navigation.compose.rememberNavController
 import com.nithiann.thecircle.presentation.ui.theme.TheCircleTheme
 import com.nithiann.thecircle.presentation.aboutpage.aboutScreen
 import com.nithiann.thecircle.presentation.profilepage.profileScreen
+import com.nithiann.thecircle.presentation.videopage.VideoActivity
 import com.nithiann.thecircle.presentation.videopage.VideoScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,7 +48,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val REQUEST_CODE_PERMISSIONS = 999
-    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,7 +103,8 @@ class MainActivity : ComponentActivity() {
                                         },
                                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                                         onClick = {
-                                            navController.navigate(screen.route)
+                                            val intent = Intent(this@MainActivity, VideoActivity::class.java)
+                                            startActivity(intent)
                                         }
                                     )
                                 }

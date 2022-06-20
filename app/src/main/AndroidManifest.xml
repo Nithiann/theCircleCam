@@ -32,6 +32,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.videopage.VideoActivity"
+            android:exported="true"
+            android:label="TheCircleCam"
+            android:theme="@style/Theme.TheCircle">
+        </activity>
     </application>
 
 </manifest>

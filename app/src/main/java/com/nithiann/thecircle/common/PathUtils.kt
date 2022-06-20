@@ -16,7 +16,7 @@ object PathUtils {
         get() {
             val storageDir =
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
-            return File(storageDir.absolutePath + "/rtmp-rtsp-stream-client-java")
+            return File(storageDir.absolutePath + "/theCircle")
         }
 
     fun getPath(context: Context, uri: Uri): String? {

@@ -12,12 +12,6 @@
         android:layout_height="wrap_content"
         android:background="#000000">
 
-        <com.nithiann.thecircle.presentation.videopage.OpenGLView
-            android:id="@+id/surfaceView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-          />
 
     </FrameLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>

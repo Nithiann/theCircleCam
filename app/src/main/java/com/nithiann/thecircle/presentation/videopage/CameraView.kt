@@ -40,15 +40,21 @@ fun CameraView(){
     val context: Context = LocalContext.current
     _context = context;
 
-    RtmpCamera()
+    RtmpCamera(context)
 
     val cameraProviderFuture = remember {
         ProcessCameraProvider.getInstance(context!!)
     }
 
+    val surfaceView = remember {
+        SurfaceView(context!!).apply {
+            id = com.nithiann.thecircle.R.id.surfaceView
+        }
+    }
+
     val previewView = remember {
         PreviewView(context!!).apply {
-            id = com.nithiann.thecircle.R.id.preview_view
+            id = com.nithiann.thecircle.R.id.surfaceView
         }
     }
 
@@ -56,35 +62,11 @@ fun CameraView(){
         Executors.newSingleThreadExecutor()
     }
 
-    AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize()) {
-        cameraProviderFuture.addListener({
-
-            val cameraProvider = cameraProviderFuture.get()
-            val preview = Preview.Builder()
-                .build()
-                .also {
-                    it.setSurfaceProvider(previewView.surfaceProvider)
-                }
-
-            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-
-            val faceAnalysis = ImageAnalysis.Builder()
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build()
-                .also {
-                    it.setAnalyzer(cameraExecutor, FaceAnalyzer())
-                }
-
-
-            try {
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, faceAnalysis)
-            } catch (e: Exception) {
-                Log.e("Exception", "CameraX not working!")
+    AndroidView(factory = { surfaceView }, modifier = Modifier.fillMaxSize()) {
+            SurfaceView(context!!).apply {
+                id = com.nithiann.thecircle.R.id.surfaceView
             }
-        }, ContextCompat.getMainExecutor(context!!))
     }
-
 }
 
 private class FaceAnalyzer(): ImageAnalysis.Analyzer {
@@ -95,10 +77,10 @@ private class FaceAnalyzer(): ImageAnalysis.Analyzer {
     }
 }
 
-private fun RtmpCamera() {
-    val openGLView: OpenGLView = OpenGLView(_context)
-    val connectCheckerRtmp: ConnectCheckerRtmp = ConnectCheckerRtmp();
-    val rtpmCamera: RtmpCamera1 = RtmpCamera1(openGLView, connectCheckerRtmp);
+private fun RtmpCamera(context: Context) {
+    val openGLView: OpenGLView = OpenGLView(context)
+    val connectCheckerRtmp: ConnectCheckerRtmp = ConnectCheckerRtmp()
+    val rtpmCamera: RtmpCamera1 = RtmpCamera1(openGLView, connectCheckerRtmp)
     val folder = PathUtils.recordPath
     rtpmCamera.setReTries(10);
 
@@ -128,10 +110,10 @@ private fun RtmpCamera() {
                         )
                     }
                 } catch (e: IOException) {
-                    rtpmCamera.stopRecord()
+                    //rtpmCamera.stopRecord()
                 }
             } else {
-                rtpmCamera.stopRecord()
+                //rtpmCamera.stopRecord()
             }
         } else {
         }
