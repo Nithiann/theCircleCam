@@ -103,8 +103,7 @@ class MainActivity : ComponentActivity() {
                                         },
                                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                                         onClick = {
-                                            val intent = Intent(this@MainActivity, VideoActivity::class.java)
-                                            startActivity(intent)
+                                            navController.navigate(screen.route)
                                         }
                                     )
                                 }
@@ -118,7 +117,10 @@ class MainActivity : ComponentActivity() {
                         ) {
                             composable(Screen.ProfileScreen.route) { profileScreen(navController) }
                             composable(Screen.AboutScreen.route) { aboutScreen(navController) }
-                            composable(Screen.LiveScreen.route) { VideoScreen(navController) }
+                            composable(Screen.LiveScreen.route) {
+                                val intent = Intent(this@MainActivity, VideoActivity::class.java)
+                                startActivity(intent)
+                            }
                         }
 
                     }
