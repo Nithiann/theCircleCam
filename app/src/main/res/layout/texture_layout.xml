@@ -19,25 +19,13 @@
         />
 
     <Button
-        android:text="start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/b_record"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/b_start_stop"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        android:layout_marginBottom="20dp"
-        />
-
-    <Button
-        android:text="stop"
+        android:text="Stream"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/b_start_stop"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/b_record"
-        app:layout_constraintEnd_toStartOf="@id/switch_camera"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/b_start_stop"
         android:layout_marginBottom="20dp"
         tools:ignore="MissingClass" />
 
