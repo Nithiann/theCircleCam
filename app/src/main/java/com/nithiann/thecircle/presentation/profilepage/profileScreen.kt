@@ -22,7 +22,6 @@ import androidx.core.app.ActivityCompat.startActivity
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.navigation.NavController
 import com.nithiann.thecircle.R
-import com.nithiann.thecircle.presentation.videopage._context
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

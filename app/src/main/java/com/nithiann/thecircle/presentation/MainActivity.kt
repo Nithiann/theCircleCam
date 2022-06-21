@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.SemanticsProperties.Error
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
@@ -40,7 +41,6 @@ import com.nithiann.thecircle.presentation.ui.theme.TheCircleTheme
 import com.nithiann.thecircle.presentation.aboutpage.aboutScreen
 import com.nithiann.thecircle.presentation.profilepage.profileScreen
 import com.nithiann.thecircle.presentation.videopage.VideoActivity
-import com.nithiann.thecircle.presentation.videopage.VideoScreen
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 import java.security.*
@@ -60,16 +60,13 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
 
-
-
         if (allPermissionsGranted()) {
 
         } else {
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
-        //getKey()
-        //PrintInstalledCertificates()
         super.onCreate(savedInstanceState)
+        getSignature()
         setContent {
             TheCircleTheme {
                 // A surface container using the 'background' color from the theme
@@ -130,7 +127,11 @@ class MainActivity : ComponentActivity() {
                         ) {
                             composable(Screen.ProfileScreen.route) { profileScreen(navController) }
                             composable(Screen.AboutScreen.route) { aboutScreen(navController) }
-                            composable(Screen.LiveScreen.route) { VideoScreen(navController) }
+                            composable(Screen.LiveScreen.route) {
+                                getSignature()
+                                val intent = Intent(LocalContext.current, VideoActivity::class.java)
+                                startActivity(intent)
+                            }
                         }
 
                     }
@@ -151,7 +152,7 @@ class MainActivity : ComponentActivity() {
         return true
     }
 
-    fun PrintInstalledCertificates() {
+    private fun PrintInstalledCertificates() {
         try {
             val ks: KeyStore = KeyStore.getInstance("AndroidCAStore")
             if (ks != null) {
@@ -185,24 +186,57 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
-    fun getKey() {
-        val privateKeyContent = Constants.privateKey.replace("\n", "").replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", "");
+    private fun getSignature() {
+        val privateKeyContent =
+            Constants.privateKey.replace("\n", "").replace("-----BEGIN PRIVATE KEY-----", "")
+                .replace("-----END PRIVATE KEY-----", "");
         val privateKeyEncoded = PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKeyContent));
         val kf: KeyFactory = KeyFactory.getInstance("RSA")
-        val ks = KeyStore.getInstance("AndroidKeyStore").apply {
+        val keyStore: KeyStore = KeyStore.getInstance("AndroidKeyStore").apply {
             load(null)
         }
 
         val privKey: PrivateKey = kf.generatePrivate(privateKeyEncoded)
-        val castore = KeyStore.getInstance("AndroidCAStore").apply {
-            load(null)
+        val ks: KeyStore = KeyStore.getInstance("AndroidCAStore")
+        try {
+            if (ks != null) {
+                ks.load(null, null)
+                val aliases: Enumeration<String> = ks.aliases()
+                while (aliases.hasMoreElements()) {
+                    val alias = aliases.nextElement() as String
+                    val cert = ks.getCertificate(alias) as X509Certificate
+                    //To print User Certs only
+                    if (alias.contains("user")) {
+                        println(alias)
+                        println(
+                            cert.subjectDN
+                                .toString()
+                                .substringAfter("=")
+                                .substringBefore(",")
+                        )
+                    }
+
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: KeyStoreException) {
+            e.printStackTrace()
+        } catch (e: NoSuchAlgorithmException) {
+            e.printStackTrace()
+        } catch (e: CertificateException) {
+            e.printStackTrace()
         }
 
+        val certificate = ks.getCertificate("user:6685520c.0")
+        keyStore.setKeyEntry("key", privKey, null, arrayOf(certificate))
 
-        val certificate = castore.getCertificate("user:45f5a707.0")
-        ks.setKeyEntry("key", privKey, null, arrayOf(certificate))
-        println(ks.getKey("key", null))
+        val cipher = Cipher.getInstance("RSA")
+        cipher.init(Cipher.ENCRYPT_MODE, privKey)
+        val text = "test"
+        val plaintext: ByteArray = text.toByteArray()
+        val ciphertext: ByteArray = cipher.doFinal(plaintext)
+        Base64.getMimeEncoder().encode(ciphertext)
     }
 }
 

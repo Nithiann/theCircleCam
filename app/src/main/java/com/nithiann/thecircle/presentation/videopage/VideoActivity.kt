@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickListener {
+class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickListener  {
     var rtmpCamera: RtmpCamera1? = null
     var sButton: Button? = null
     var streamButton: Button? = null
