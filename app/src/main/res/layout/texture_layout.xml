@@ -24,6 +24,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:text="Stream"
+        android:textSize="20dp"
+        android:textColor="@color/gray"
+        android:background="@drawable/button_shape"
         android:gravity="center"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -33,13 +36,12 @@
 
     <Button
         android:id="@+id/switch_camera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="680dp"
-        android:text="Switch"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="51dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_switch_camera_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@id/b_start_stop"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingClass" />
 </androidx.constraintlayout.widget.ConstraintLayout>
