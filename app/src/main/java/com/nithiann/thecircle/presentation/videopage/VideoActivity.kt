@@ -69,7 +69,7 @@ class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickLi
         if (!rtmpCamera!!.isStreaming()) {
             if (rtmpCamera!!.isRecording()
                 || rtmpCamera!!.prepareAudio() && rtmpCamera!!.prepareVideo()) {
-                rtmpCamera!!.startStream("rtmp://88.198.76.192:8000/live/developmentApp")
+                rtmpCamera?.startStream("rtmp://88.198.76.192/live/AndroidBas")
                 Toast.makeText(this, "Started streaming", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Error preparing stream, This device cant do it",
