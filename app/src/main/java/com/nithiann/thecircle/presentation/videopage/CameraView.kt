@@ -85,7 +85,7 @@ private fun RtmpCamera(context: Context) {
     rtpmCamera.setReTries(10);
 
     if (rtpmCamera.prepareAudio() && rtpmCamera.prepareVideo()) {
-        rtpmCamera.startStream("rtmp://88.198.76.192/live/DaddyAndroid")
+        rtpmCamera.startStream("rtpm://88.198.76.192/live/DaddyAndroid2")
         println(rtpmCamera.isRecording())
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             if (!rtpmCamera.isRecording()) {
