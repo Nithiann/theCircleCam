@@ -3,7 +3,9 @@ package com.nithiann.thecircle.presentation.videopage
 import android.os.Bundle
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.View
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.core.graphics.PathUtils
@@ -15,16 +17,19 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class VideoActivity: ComponentActivity(), SurfaceHolder.Callback {
+class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickListener {
     var rtmpCamera: RtmpCamera1? = null
-    val folder = com.nithiann.thecircle.common.PathUtils.recordPath;
+    var sButton: Button? = null
     //@SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(com.nithiann.thecircle.R.layout.texture_layout)
         val connectCheckerRtmp: ConnectCheckerRtmp = ConnectCheckerRtmp()
         val openGlView: SurfaceView = findViewById(com.nithiann.thecircle.R.id.surfaceView)
+        sButton = findViewById(R.id.switch_camera)
+        sButton!!.setOnClickListener(this)
         rtmpCamera = RtmpCamera1(openGlView, connectCheckerRtmp)
         openGlView.holder.addCallback(this);
         //openGlView.setOnTouchListener(this);
@@ -58,5 +63,12 @@ class VideoActivity: ComponentActivity(), SurfaceHolder.Callback {
             rtmpCamera?.stopStream();
         }
         rtmpCamera?.stopPreview();
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id) {
+            R.id.switch_camera -> rtmpCamera!!.switchCamera()
+        }
+
     }
 }
