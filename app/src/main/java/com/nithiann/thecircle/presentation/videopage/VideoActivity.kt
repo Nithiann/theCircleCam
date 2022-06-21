@@ -11,6 +11,7 @@ import androidx.activity.ComponentActivity
 import androidx.core.graphics.PathUtils
 import com.nithiann.thecircle.R
 import com.nithiann.thecircle.common.PathUtils.updateGallery
+import com.nithiann.thecircle.domain.use_case.getMessagesUseCase
 import com.pedro.rtplibrary.rtmp.RtmpCamera1
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -79,6 +80,10 @@ class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickLi
             rtmpCamera?.stopStream();
             Toast.makeText(this, "Stopped streaming", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun getMessages() {
+
     }
 
 }

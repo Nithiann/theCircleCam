@@ -35,15 +35,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.nithiann.thecircle.common.Constants
 import com.nithiann.thecircle.presentation.ui.theme.TheCircleTheme
 import com.nithiann.thecircle.presentation.aboutpage.aboutScreen
 import com.nithiann.thecircle.presentation.profilepage.profileScreen
 import com.nithiann.thecircle.presentation.videopage.VideoActivity
 import com.nithiann.thecircle.presentation.videopage.VideoScreen
 import dagger.hilt.android.AndroidEntryPoint
-import java.security.KeyFactory
-import java.security.KeyStore
-import java.security.PrivateKey
+import java.io.IOException
+import java.security.*
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
 import java.security.spec.PKCS8EncodedKeySpec
 import java.util.*
 import javax.crypto.Cipher
@@ -65,7 +67,8 @@ class MainActivity : ComponentActivity() {
         } else {
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
-        getKey()
+        //getKey()
+        //PrintInstalledCertificates()
         super.onCreate(savedInstanceState)
         setContent {
             TheCircleTheme {
@@ -148,37 +151,43 @@ class MainActivity : ComponentActivity() {
         return true
     }
 
+    fun PrintInstalledCertificates() {
+        try {
+            val ks: KeyStore = KeyStore.getInstance("AndroidCAStore")
+            if (ks != null) {
+                ks.load(null, null)
+                val aliases: Enumeration<String> = ks.aliases()
+                while (aliases.hasMoreElements()) {
+                    val alias = aliases.nextElement() as String
+                    val cert = ks.getCertificate(alias) as X509Certificate
+                    //To print System Certs only
+                    if (cert.issuerDN.name.contains("system")) {
+                        println(cert.issuerDN.name)
+                    }
+
+                    //To print User Certs only
+                    if (cert.issuerDN.name.contains("user")) {
+                        println(cert)
+                    }
+
+                    //To print all certs
+                    println(cert.issuerDN.name)
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: KeyStoreException) {
+            e.printStackTrace()
+        } catch (e: NoSuchAlgorithmException) {
+            e.printStackTrace()
+        } catch (e: CertificateException) {
+            e.printStackTrace()
+        }
+    }
+
 
     fun getKey() {
-        val privateKey = "-----BEGIN PRIVATE KEY-----\n" +
-                "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDEmwj9cJwubIDQ\n" +
-                "OHYlfT5RkoEjvls9L9iDT4vcclh91AfXcS4cVj4eOOtGsOtYkFtdxPmpMQibd92V\n" +
-                "XcI0cN8JVwr+B6+jTGtEu1AEBi0RhaFttemj4flsUXoaL2tQqeVIHmyqaaDU7Imh\n" +
-                "+u8DlKt/lI6Ou0kJQwZymL4e17rJJJDLdRO1vcVE+yUDTBdqGxu//CFyHTjqcKB7\n" +
-                "V69/m3TxdSs673DV6GWi99uxRnf3CRfmovxSGLRQxIwE7XTQU7QCUAQd5yrLxXMl\n" +
-                "JTVdw/aWMuAfINA2PtNlfCTZRlAtvGznnS7nAg4kES1L33Q0f3jl30Ud4KxqOfnE\n" +
-                "bMbBHMbhAgMBAAECggEABh0DWAzG284FlAlAFJAC6TrC0jo1OxSq86unCoPxtXlA\n" +
-                "2dWhR0H1Qi+nPTZQyHBgruyU43UXXUI1En5tBKrCfKyyC6PF4IWGoQdUCHQACxdF\n" +
-                "JZSuVFQOqJbAqGIeFk7aHCEkuYh5oZ/4nZ/1tlOf9jfH1loDfjVmf2y5c1sQ6ffa\n" +
-                "OcmCB4GV2N3iHXiHSvHR6T6PzTFMyXb8UbeXOUg7Bdg2cZHES3DiKGE6crYm7Jh6\n" +
-                "xYdOsMx0OqHWrwAdYs9HoLNUt/e6pDGurFw6X7iLlMXLOKT0PQVyqvy93Yk914kM\n" +
-                "i0hKjK4gmgpJrrlQlOYUb2VwDM5AllhgCrf/wwjXWQKBgQDH1wpNsZYmDDj2o4kc\n" +
-                "2alPhk6hJP5RglFfrd7EOhMOhbRJj9Ar/CG0c+RHIcvQD/m/I19t58yoDEByMkXX\n" +
-                "Yzu2KnqbA/zPN1qyjM2f9X83MN/gdzGIQ4QazOTbiL/kUoXbjlPTzN2vrgrqPnZt\n" +
-                "uYEWPhBOFns4zxjHTPYdIhje7QKBgQD7204MuDjJuvr3HjW+pSiDtiHdYJm+1sMi\n" +
-                "pf73g9OxrlNH0+xjNF7J+4BZoS3yErnrHP25UsQuuDT1z186ZwBHCtIyRViOzU4F\n" +
-                "qWscD7Fv22e6MaNV2oX/iifVuhPOGd8E4YER822CY6fJMi0rTZ+Pdtom9zHayyS/\n" +
-                "7ZDGF3RVRQKBgGcM0chcsiOum9U7YWIaL7/Nb1CTpf1cKSAgpcYkeF09v0lLurpj\n" +
-                "yvGl7Wps2A/TnSLeV8ByDsv9fWIl4HQAPPNkFlNHjB9C2SdHimVZEB/iuR+j90vg\n" +
-                "HQhA7iby7pkLoPEmBL4sX4jPQ9ulGCbeyN0yZfAOkb4qtQlY+3Tsd0zFAoGALWyE\n" +
-                "Sy7+rwOWN/Ou5c+L2xWCThcaI51AXINr1OBl0eoLAy1puQq8/djqcT/stXhDJ/B2\n" +
-                "onIXCAYZJyxblID3P9jnyEFRk4/bvpGry8fYzL/ZmW9Sci2TdV9Jh/ajk8x+uLaj\n" +
-                "PMWWvqmSnWr7UpARcyKQfe6fg0KYQjVqow+f37ECgYEAmdg3Fl7ti6q05zuuJHvo\n" +
-                "Rqj8FTmOeShgWsh+CBbq6cXHaIZxhCobOtXZvf+kS03qASG7p0y9Iy1jlA4F4gZQ\n" +
-                "l3EDSZs95n0ETWx1EMmzcZrDdVbiBE4kiWPSvBjtCJhVYRi0QZxbZvKBmkSpnYIQ\n" +
-                "upy6f74TTHbF8pTv2O0e/JU=\n" +
-                "-----END PRIVATE KEY-----"
-        val privateKeyContent = privateKey.replace("\n", "").replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", "");
+        val privateKeyContent = Constants.privateKey.replace("\n", "").replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", "");
         val privateKeyEncoded = PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKeyContent));
         val kf: KeyFactory = KeyFactory.getInstance("RSA")
         val ks = KeyStore.getInstance("AndroidKeyStore").apply {
@@ -189,6 +198,8 @@ class MainActivity : ComponentActivity() {
         val castore = KeyStore.getInstance("AndroidCAStore").apply {
             load(null)
         }
+
+
         val certificate = castore.getCertificate("user:45f5a707.0")
         ks.setKeyEntry("key", privKey, null, arrayOf(certificate))
         println(ks.getKey("key", null))
