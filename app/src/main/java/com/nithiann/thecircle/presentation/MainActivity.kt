@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.nithiann.thecircle.presentation.aboutpage.aboutScreen
 import com.nithiann.thecircle.presentation.profilepage.profileScreen
@@ -55,44 +56,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-//    @OptIn(ExperimentalMaterial3Api::class)
-//    @Composable
-//    fun OptionMenu() {
-//        var showMenu by remember { mutableStateOf(false) }
-//        SmallTopAppBar(
-//            title = { Text1("Simple TopAppBar") },
-//            navigationIcon = {
-//                IconButton(onClick = {showMenu = !showMenu }) {
-//                    Icon(
-//                        imageVector = Icons.Filled.Menu,
-//                        contentDescription = "Localized description"
-//                    )
-//                }
-//            },
-//            actions = {
-//                IconButton(onClick = { /* doSomething() */ }) {
-//                    Icon(
-//                        imageVector = Icons.Filled.Favorite,
-//                        contentDescription = "Localized description"
-//                    )
-//                }
-//                DropdownMenu(
-//                    expanded = showMenu,
-//                    onDismissRequest = { showMenu = false }
-//                ) {
-//                    DropdownMenuItem(onClick = { /*TODO*/ }) {
-//
-//                    }
-//                    DropdownMenuItem(onClick = { /*TODO*/ }) {
-//
-//                    }
-//                }
-//            }
-//
-//        )
-//
-//    }
-
     @Composable
     private fun BottomBar() {
         TheCircleTheme {
@@ -102,9 +65,8 @@ class MainActivity : ComponentActivity() {
                 color = MaterialTheme.colors.primary
             ) {
                 val navController = rememberNavController()
-//                val menuIcons =
-//                    listOf(Icons.Filled.Menu, Icons.Filled.Person)
-//                val menu = listOf(Screen.AboutScreen, Screen.ProfileScreen)
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
 
                 Scaffold(
                     bottomBar = {
@@ -135,7 +97,7 @@ class MainActivity : ComponentActivity() {
                             NavigationBarItem(
                                 icon = { Icon(Icons.Filled.Person, contentDescription = null, tint = Color.White, modifier = Modifier.size(32.dp)) },
                                 onClick = {
-                                    Screen.AboutScreen.route?.let {
+                                    Screen.ProfileScreen.route?.let {
                                         navController.navigate(it) {
                                             popUpTo(navController.graph.findStartDestination().id) {
                                                 saveState = true
@@ -145,31 +107,10 @@ class MainActivity : ComponentActivity() {
                                         }
 
                                     }
-                                    Screen.AboutScreen.route?.let { navController.navigate(it) }
+                                    Screen.ProfileScreen.route?.let { navController.navigate(it) }
                                 },
                                 selected = false
                             )
-
-
-//                            val navBackStackEntry by navController.currentBackStackEntryAsState()
-//                            val currentDestination = navBackStackEntry?.destination
-//
-//                            menu.forEachIndexed { index, screen ->
-//                                NavigationBarItem(
-//                                    icon = {
-//                                        Icon(
-//                                            menuIcons[index],
-//                                            contentDescription = null,
-//                                            tint = Color.White
-//                                        )
-//                                    },
-//                                    selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-//
-//                                    onClick = {
-//                                        navController.navigate(screen.route)
-//                                    }
-//                                )
-//                            }
                         }
                     },
                     floatingActionButtonPosition = FabPosition.Center,
