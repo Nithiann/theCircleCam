@@ -48,7 +48,11 @@ import javax.crypto.Cipher
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val REQUEST_CODE_PERMISSIONS = 999
-    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    private val REQUIRED_PERMISSIONS = arrayOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,7 +93,14 @@ class MainActivity : ComponentActivity() {
                         ) {
 
                             NavigationBarItem(
-                                icon = { Icon(Icons.Filled.Menu, contentDescription = null, tint = Color.White, modifier = Modifier.size(32.dp)) },
+                                icon = {
+                                    Icon(
+                                        Icons.Filled.Menu,
+                                        contentDescription = null,
+                                        tint = Color.White,
+                                        modifier = Modifier.size(32.dp)
+                                    )
+                                },
                                 onClick = {
                                     Screen.AboutScreen.route?.let {
                                         navController.navigate(it) {
@@ -100,13 +111,20 @@ class MainActivity : ComponentActivity() {
                                             restoreState = true
                                         }
 
-                                        }
+                                    }
                                     Screen.AboutScreen.route?.let { navController.navigate(it) }
                                 },
                                 selected = false
                             )
                             NavigationBarItem(
-                                icon = { Icon(Icons.Filled.Person, contentDescription = null, tint = Color.White, modifier = Modifier.size(32.dp)) },
+                                icon = {
+                                    Icon(
+                                        Icons.Filled.Person,
+                                        contentDescription = null,
+                                        tint = Color.White,
+                                        modifier = Modifier.size(32.dp)
+                                    )
+                                },
                                 onClick = {
                                     Screen.ProfileScreen.route?.let {
                                         navController.navigate(it) {
@@ -150,8 +168,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
-                ) {
-                        innerPadding ->
+                ) { innerPadding ->
                     NavHost(
                         navController,
                         startDestination = Screen.AboutScreen.route,
@@ -162,7 +179,6 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.LiveScreen.route) { VideoScreen(navController) }
                     }
 
-                    }
                 }
             }
         }
@@ -210,7 +226,9 @@ class MainActivity : ComponentActivity() {
                 "l3EDSZs95n0ETWx1EMmzcZrDdVbiBE4kiWPSvBjtCJhVYRi0QZxbZvKBmkSpnYIQ\n" +
                 "upy6f74TTHbF8pTv2O0e/JU=\n" +
                 "-----END PRIVATE KEY-----"
-        val privateKeyContent = privateKey.replace("\n", "").replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", "");
+        val privateKeyContent =
+            privateKey.replace("\n", "").replace("-----BEGIN PRIVATE KEY-----", "")
+                .replace("-----END PRIVATE KEY-----", "");
         val privateKeyEncoded = PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKeyContent));
         val kf: KeyFactory = KeyFactory.getInstance("RSA")
         val ks = KeyStore.getInstance("AndroidKeyStore").apply {
@@ -226,4 +244,3 @@ class MainActivity : ComponentActivity() {
         println(ks.getKey("key", null))
     }
 }
-
