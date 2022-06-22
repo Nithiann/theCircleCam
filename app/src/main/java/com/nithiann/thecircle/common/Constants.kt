@@ -30,6 +30,6 @@ object Constants {
             "G2D93AujplKcr6/YPkTT4aH3VGJr5L8MTusYMHdCZv5b+ty2jeHqo5M/11buZ2Kl\n" +
             "G9yMVXG6s3BXztHmTVEvXuU5u5IbVDhpNsnW3s9+i/8NbKRj5gM55yPBoIHSlGt/\n" +
             "W9vQV+EafUxoCv5aH+gEpA==\n" +
-            "-----END PRIVATE KEY-----\n"
+            "-----END PRIVATE KEY-----"
     const val tmpStreamerEmail: String = "lmj.clercx@student.avans.nl"
 }

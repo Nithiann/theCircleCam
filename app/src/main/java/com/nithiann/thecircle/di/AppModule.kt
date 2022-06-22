@@ -12,6 +12,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.security.KeyStore
 import javax.inject.Singleton
 
 @Module
@@ -39,5 +40,21 @@ object AppModule {
     @Singleton
     fun provideMessagesRepository(api: Api): MessageRepository {
         return MessageRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCAKeyStore(): KeyStore {
+        return KeyStore.getInstance("AndroidCAStore").apply {
+            load(null)
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun providePrivateKeyStore(): KeyStore {
+        return KeyStore.getInstance("AndroidKeyStore").apply {
+            load(null)
+        }
     }
 }

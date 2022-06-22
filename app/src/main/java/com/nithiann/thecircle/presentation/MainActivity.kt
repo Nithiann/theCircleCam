@@ -32,6 +32,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.nithiann.thecircle.common.Constants
+import com.nithiann.thecircle.infrastructure.remote.Encrypt
 import com.nithiann.thecircle.presentation.aboutpage.aboutScreen
 import com.nithiann.thecircle.presentation.profilepage.profileScreen
 import com.nithiann.thecircle.presentation.ui.theme.TheCircleTheme
@@ -54,11 +55,14 @@ import javax.crypto.Cipher
 class MainActivity : ComponentActivity() {
 
     private val REQUEST_CODE_PERMISSIONS = 999
-    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    private val REQUIRED_PERMISSIONS = arrayOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
-
 
 
         if (allPermissionsGranted()) {
@@ -67,7 +71,13 @@ class MainActivity : ComponentActivity() {
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
         super.onCreate(savedInstanceState)
-        getSignature()
+
+        val hashed = Encrypt.hash("a")
+        println("Hashed: " + hashed)
+        val encrypted = Encrypt.encryption(hashed)
+        //val urlencoded = Encrypt.encodeHREF(encrypted)
+        println("Encrypted: " + encrypted)
+
         setContent {
             Column() {
 //                OptionMenu()
@@ -237,59 +247,6 @@ class MainActivity : ComponentActivity() {
         } catch (e: CertificateException) {
             e.printStackTrace()
         }
-    }
-
-    private fun getSignature() {
-        val privateKeyContent =
-            Constants.privateKey.replace("\n", "").replace("-----BEGIN PRIVATE KEY-----", "")
-                .replace("-----END PRIVATE KEY-----", "");
-        val privateKeyEncoded = PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKeyContent));
-        val kf: KeyFactory = KeyFactory.getInstance("RSA")
-        val keyStore: KeyStore = KeyStore.getInstance("AndroidKeyStore").apply {
-            load(null)
-        }
-
-        val privKey: PrivateKey = kf.generatePrivate(privateKeyEncoded)
-        val ks: KeyStore = KeyStore.getInstance("AndroidCAStore")
-        try {
-            if (ks != null) {
-                ks.load(null, null)
-                val aliases: Enumeration<String> = ks.aliases()
-                while (aliases.hasMoreElements()) {
-                    val alias = aliases.nextElement() as String
-                    val cert = ks.getCertificate(alias) as X509Certificate
-                    //To print User Certs only
-                    if (alias.contains("user")) {
-                        println(alias)
-                        println(
-                            cert.subjectDN
-                                .toString()
-                                .substringAfter("=")
-                                .substringBefore(",")
-                        )
-                    }
-
-                }
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } catch (e: KeyStoreException) {
-            e.printStackTrace()
-        } catch (e: NoSuchAlgorithmException) {
-            e.printStackTrace()
-        } catch (e: CertificateException) {
-            e.printStackTrace()
-        }
-
-        val certificate = ks.getCertificate("user:6685520c.0")
-        keyStore.setKeyEntry("key", privKey, null, arrayOf(certificate))
-
-        val cipher = Cipher.getInstance("RSA")
-        cipher.init(Cipher.ENCRYPT_MODE, privKey)
-        val text = "test"
-        val plaintext: ByteArray = text.toByteArray()
-        val ciphertext: ByteArray = cipher.doFinal(plaintext)
-        Base64.getMimeEncoder().encode(ciphertext)
     }
 }
 

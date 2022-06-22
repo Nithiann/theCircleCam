@@ -10,5 +10,7 @@ interface Api {
 
     @GET("/api/Messages/streamer/:streamerEmail/:signature")
     suspend fun getMessages(streamerEmail: String, signature: String): List<MessageDTO>
+
+
 }
 
