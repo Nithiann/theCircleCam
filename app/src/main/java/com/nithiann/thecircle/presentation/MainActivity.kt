@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
         }
         super.onCreate(savedInstanceState)
 
-        val hashed = Encrypt.hash("a")
+        val hashed = Encrypt.hash("lmj.clercx@student.avans.nl")
         println("Hashed: " + hashed)
         val encrypted = Encrypt.encryption(hashed)
         //val urlencoded = Encrypt.encodeHREF(encrypted)

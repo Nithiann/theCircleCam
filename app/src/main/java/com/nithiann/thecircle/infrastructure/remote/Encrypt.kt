@@ -14,20 +14,18 @@ import javax.crypto.Cipher
 
 object Encrypt {
 
-    val privateKeyContent =
+    private val privateKeyContent =
         Constants.privateKey.replace("\n", "").replace("-----BEGIN PRIVATE KEY-----", "")
-            .replace("-----END PRIVATE KEY-----", "");
-    val privateKeyEncoded = PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKeyContent));
-    val kf: KeyFactory = KeyFactory.getInstance("RSA")
-    val privKey: PrivateKey = kf.generatePrivate(privateKeyEncoded)
-
+            .replace("-----END PRIVATE KEY-----", "")
+    private val privateKeyEncoded = PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKeyContent));
+    private val kf: KeyFactory = KeyFactory.getInstance("RSA")
+    private val privKey: PrivateKey = kf.generatePrivate(privateKeyEncoded)
 
     fun hash(email: String): ByteArray {
         val bytes = email.toByteArray()
         val md = MessageDigest.getInstance("SHA-256")
         val digest = md.digest(bytes)
         return digest
-    /*.fold("", { str, it -> str + "%02x".format(it) })*/
     }
 
     fun getEmail(): String {
@@ -73,13 +71,13 @@ object Encrypt {
         val ks = getCAStore()
         val certificate = ks.getCertificate("user:6685520c.0")
         keyStore.setKeyEntry("key", privKey, null, arrayOf(certificate))
-        val cipher = Cipher.getInstance("RSA")
-        cipher.init(Cipher.ENCRYPT_MODE, privKey)
-        val plaintext: ByteArray = input
-        val ciphertext: ByteArray = cipher.doFinal(plaintext)
-        Base64.getMimeEncoder().encode(ciphertext)
-        val par = String(Base64.getMimeEncoder().encode(ciphertext))
-        return(par)
+        val signature = Signature.getInstance("NONEwithRSA")
+        signature.initSign(privKey)
+        signature.update(input)
+        val ciphertext: ByteArray = signature.sign()
+        val par = String(Base64.getEncoder().encode(ciphertext))
+        println(par)
+        return par
     }
 
     fun encodeHREF(input: String): String {
