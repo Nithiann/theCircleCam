@@ -6,6 +6,7 @@ import com.nithiann.thecircle.domain.models.Contributor
 import com.nithiann.thecircle.domain.models.Message
 import com.nithiann.thecircle.domain.repository.AboutRepository
 import com.nithiann.thecircle.domain.repository.MessageRepository
+import com.nithiann.thecircle.infrastructure.remote.Encrypt
 import com.nithiann.thecircle.infrastructure.remote.dto.toContributor
 import com.nithiann.thecircle.infrastructure.remote.dto.toMessage
 import kotlinx.coroutines.flow.Flow
@@ -41,30 +42,12 @@ class getMessagesUseCase @Inject constructor(
     }
 
     private fun getSignature(): String {
-        val privateKeyContent =
-            Constants.privateKey.replace("\n", "").replace("-----BEGIN PRIVATE KEY-----", "")
-                .replace("-----END PRIVATE KEY-----", "");
-        val privateKeyEncoded = PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKeyContent));
-        val kf: KeyFactory = KeyFactory.getInstance("RSA")
-        val ks = KeyStore.getInstance("AndroidKeyStore").apply {
-            load(null)
-        }
-
-        val privKey: PrivateKey = kf.generatePrivate(privateKeyEncoded)
-        val castore = KeyStore.getInstance("AndroidCAStore").apply {
-            load(null)
-        }
-
-        println(castore)
-
-        val certificate = castore.getCertificate("user:45f5a707.0")
-        ks.setKeyEntry("key", privKey, null, arrayOf(certificate))
-
-        val cipher = Cipher.getInstance("RSA")
-        cipher.init(Cipher.ENCRYPT_MODE, privKey)
-        val text = "test"
-        val plaintext: ByteArray = text.toByteArray()
-        val ciphertext: ByteArray = cipher.doFinal(plaintext)
-        return "hello"
+        val hashed = Encrypt.hash(Constants.tmpStreamerEmail)
+        println("Hashed: " + hashed)
+        val encrypted = Encrypt.encryption(hashed)
+        //val urlencoded = Encrypt.encodeHREF(encrypted)
+        println("Encrypted: " + encrypted)
+        val encryptedURL = Encrypt.encodeHREF(encrypted)
+        return encryptedURL
     }
 }

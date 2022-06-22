@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.NetworkOnMainThreadException
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -39,6 +40,7 @@ import com.nithiann.thecircle.presentation.ui.theme.TheCircleTheme
 import com.nithiann.thecircle.presentation.videopage.VideoActivity
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
+import java.net.URL
 import java.security.*
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -71,12 +73,6 @@ class MainActivity : ComponentActivity() {
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
         super.onCreate(savedInstanceState)
-
-        val hashed = Encrypt.hash("lmj.clercx@student.avans.nl")
-        println("Hashed: " + hashed)
-        val encrypted = Encrypt.encryption(hashed)
-        //val urlencoded = Encrypt.encodeHREF(encrypted)
-        println("Encrypted: " + encrypted)
 
         setContent {
             Column() {
