@@ -3,7 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nithiann.thecircle">
 
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:usesCleartextTraffic="true"
+        android:name=".TheCircleCam"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,7 +23,7 @@
         android:theme="@style/Theme.TheCircle"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.TheCircle">
@@ -23,6 +32,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".presentation.videopage.VideoActivity"
+            android:exported="true"
+            android:label="TheCircleCam"
+            android:theme="@style/Theme.TheCircle">
         </activity>
     </application>
 
