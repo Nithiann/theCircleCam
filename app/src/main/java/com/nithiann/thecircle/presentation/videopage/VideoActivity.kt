@@ -1,6 +1,7 @@
 package com.nithiann.thecircle.presentation.videopage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
@@ -13,7 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.gson.GsonBuilder
 import com.nithiann.thecircle.R
+import com.nithiann.thecircle.common.Constants
 import com.nithiann.thecircle.common.PathUtils.updateGallery
 import com.nithiann.thecircle.domain.repository.MessageRepository
 import com.nithiann.thecircle.domain.use_case.getMessagesUseCase
@@ -22,7 +25,15 @@ import com.nithiann.thecircle.infrastructure.remote.Encrypt
 import com.nithiann.thecircle.infrastructure.repository.MessageRepositoryImpl
 import com.pedro.rtplibrary.rtmp.RtmpCamera1
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.io.IOException
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -95,7 +106,8 @@ class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickLi
         if (!rtmpCamera!!.isStreaming()) {
             if (rtmpCamera!!.isRecording()
                 || rtmpCamera!!.prepareAudio() && rtmpCamera!!.prepareVideo()) {
-                rtmpCamera?.startStream("rtmp://88.198.76.192/live/AndroidBas")
+                rtmpCamera?.startStream("rtmp://88.198.76.192/live/" + Encrypt.getName())
+                startStreaming()
                 Toast.makeText(this, "Started streaming", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Error preparing stream, This device cant do it",
@@ -103,16 +115,95 @@ class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickLi
             }
         } else {
             rtmpCamera?.stopStream();
+            stopStreaming()
             Toast.makeText(this, "Stopped streaming", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun getMessages() {
+    private fun startStreaming(){
 
-        val hashed = Encrypt.hash(Encrypt.getEmail())
-        val encrypted = Encrypt.encryption(hashed)
-        val encoded = Encrypt.encodeHREF(encrypted)
-        //repo.getMessages(Encrypt.getEmail(), encoded)
+        // Create JSON using JSONObject
+        val jsonObject = JSONObject()
+        jsonObject.put("streamName", Encrypt.getEmail())
+        jsonObject.put("signature", Encrypt.encryption(Encrypt.hash(Encrypt.getEmail())))
+
+        // Convert JSONObject to String
+        val jsonObjectString = jsonObject.toString()
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val url = URL(Constants.BASE_URL2 + "api/Stream")
+            val httpURLConnection = url.openConnection() as HttpURLConnection
+            httpURLConnection.requestMethod = "POST"
+            httpURLConnection.setRequestProperty("Content-Type", "application/json") // The format of the content we're sending to the server
+            httpURLConnection.setRequestProperty("Accept", "application/json") // The format of response we want to get from the server
+            httpURLConnection.doInput = true
+            httpURLConnection.doOutput = true
+
+            // Send the JSON we created
+            val outputStreamWriter = OutputStreamWriter(httpURLConnection.outputStream)
+            outputStreamWriter.write(jsonObjectString)
+            outputStreamWriter.flush()
+
+            // Check if the connection is successful
+            val responseCode = httpURLConnection.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                val response = httpURLConnection.inputStream.bufferedReader()
+                    .use { it.readText() }  // defaults to UTF-8
+                withContext(Dispatchers.Main) {
+
+                    // Convert raw JSON to pretty JSON using GSON library
+                    val gson = GsonBuilder().setPrettyPrinting().create()
+                    val prettyJson = gson.toJson(response)
+                    Log.d("Pretty Printed JSON :", prettyJson)
+
+                }
+            } else {
+                Log.e("HTTPURLCONNECTION_ERROR", responseCode.toString())
+            }
+        }
+    }
+
+    private fun stopStreaming(){
+
+        // Create JSON using JSONObject
+        val jsonObject = JSONObject()
+        jsonObject.put("streamName", Encrypt.getEmail())
+        jsonObject.put("signature", Encrypt.encryption(Encrypt.hash(Encrypt.getEmail())))
+
+        // Convert JSONObject to String
+        val jsonObjectString = jsonObject.toString()
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val url = URL(Constants.BASE_URL2 + "api/Stream/end")
+            val httpURLConnection = url.openConnection() as HttpURLConnection
+            httpURLConnection.requestMethod = "PUT"
+            httpURLConnection.setRequestProperty("Content-Type", "application/json") // The format of the content we're sending to the server
+            httpURLConnection.setRequestProperty("Accept", "application/json") // The format of response we want to get from the server
+            httpURLConnection.doInput = true
+            httpURLConnection.doOutput = true
+
+            // Send the JSON we created
+            val outputStreamWriter = OutputStreamWriter(httpURLConnection.outputStream)
+            outputStreamWriter.write(jsonObjectString)
+            outputStreamWriter.flush()
+
+            // Check if the connection is successful
+            val responseCode = httpURLConnection.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                val response = httpURLConnection.inputStream.bufferedReader()
+                    .use { it.readText() }  // defaults to UTF-8
+                withContext(Dispatchers.Main) {
+
+                    // Convert raw JSON to pretty JSON using GSON library
+                    val gson = GsonBuilder().setPrettyPrinting().create()
+                    val prettyJson = gson.toJson(response)
+                    Log.d("Pretty Printed JSON :", prettyJson)
+
+                }
+            } else {
+                Log.e("HTTPURLCONNECTION_ERROR", responseCode.toString())
+            }
+        }
     }
 
 }

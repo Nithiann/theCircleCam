@@ -28,6 +28,38 @@ object Encrypt {
         return digest
     }
 
+    fun getName(): String {
+        val ks = getCAStore();
+        try {
+            if (ks != null) {
+                ks.load(null, null)
+                val aliases: Enumeration<String> = ks.aliases()
+                while (aliases.hasMoreElements()) {
+                    val alias = aliases.nextElement() as String
+                    val cert = ks.getCertificate(alias) as X509Certificate
+                    //To print User Certs only
+                    if (alias.contains("user")) {
+                        println(alias)
+                        println(
+                            cert.issuerDN.name.toString().substringAfter(",").substringAfter("=").substringBefore(",").substringBefore(" ")
+                        )
+                        return cert.issuerDN.name.toString().substringAfter(",").substringAfter("=").substringBefore(",").substringBefore(" ")
+                    }
+
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: KeyStoreException) {
+            e.printStackTrace()
+        } catch (e: NoSuchAlgorithmException) {
+            e.printStackTrace()
+        } catch (e: CertificateException) {
+            e.printStackTrace()
+        }
+        return "";
+    }
+
     fun getEmail(): String {
         val ks = getCAStore();
         try {

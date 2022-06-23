@@ -74,6 +74,8 @@ class MainActivity : ComponentActivity() {
         }
         super.onCreate(savedInstanceState)
 
+        Encrypt.getName()
+
         setContent {
             Column() {
 //                OptionMenu()
