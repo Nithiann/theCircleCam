@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nithiann.thecircle.R
 import com.nithiann.thecircle.common.PathUtils.updateGallery
@@ -34,6 +36,7 @@ class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickLi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        setContent { MessageScreen() }
         setContentView(com.nithiann.thecircle.R.layout.texture_layout)
         val connectCheckerRtmp: ConnectCheckerRtmp = ConnectCheckerRtmp()
         val openGlView: SurfaceView = findViewById(com.nithiann.thecircle.R.id.surfaceView)
@@ -43,7 +46,8 @@ class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickLi
         streamButton!!.setOnClickListener(this)
         rtmpCamera = RtmpCamera1(openGlView, connectCheckerRtmp)
         openGlView.holder.addCallback(this);
-        setContent { MessageScreen() }
+
+
         //this.getMessages()
         //openGlView.setOnTouchListener(this);
     }
@@ -53,7 +57,7 @@ class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickLi
         val state = viewModel.state.value
 
         println(state)
-
+        Modifier.alpha(0f)
         state.messages?.forEach { message ->
          println("hello wolrd")
         //println(message)
