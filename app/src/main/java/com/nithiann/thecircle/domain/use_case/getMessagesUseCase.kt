@@ -48,6 +48,7 @@ class getMessagesUseCase @Inject constructor(
         //val urlencoded = Encrypt.encodeHREF(encrypted)
         println("Encrypted: " + encrypted)
         val encryptedURL = Encrypt.encodeHREF(encrypted)
-        return encryptedURL
+        println("EncryptedURL: " + encryptedURL)
+        return encrypted
     }
 }

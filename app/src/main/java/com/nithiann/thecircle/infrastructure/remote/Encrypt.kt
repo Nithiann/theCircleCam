@@ -81,7 +81,7 @@ object Encrypt {
     }
 
     fun encodeHREF(input: String): String {
-        return URLEncoder.encode(input, "utf-8")
+        return URLEncoder.encode(input, "ASCII")
     }
 
     private fun getCAStore ():KeyStore {
