@@ -2,7 +2,7 @@ package com.nithiann.thecircle.common
 
 object Constants {
 
-    const val BASE_URL= "https://thecircleapi.azurewebsites.net/swagger/"
+    const val BASE_URL= "http://thecircleapi.azurewebsites.net/swagger/"
     const val privateKey = "-----BEGIN PRIVATE KEY-----\n" +
             "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC2hQtIVjYtvayV\n" +
             "PJoj07DPIh1z/XrDKNdQ/nwkUbZ0ZWwZGobnxsspQjepb5kD4X2+FSSZQ+plf0a+\n" +
