@@ -124,8 +124,8 @@ class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickLi
 
         // Create JSON using JSONObject
         val jsonObject = JSONObject()
-        jsonObject.put("streamName", Encrypt.getEmail())
-        jsonObject.put("signature", Encrypt.encryption(Encrypt.hash(Encrypt.getEmail())))
+        jsonObject.put("streamName", Encrypt.getName())
+        jsonObject.put("signature", Encrypt.encryption(Encrypt.hash(Encrypt.getName())))
 
         // Convert JSONObject to String
         val jsonObjectString = jsonObject.toString()
@@ -167,8 +167,8 @@ class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickLi
 
         // Create JSON using JSONObject
         val jsonObject = JSONObject()
-        jsonObject.put("streamName", Encrypt.getEmail())
-        jsonObject.put("signature", Encrypt.encryption(Encrypt.hash(Encrypt.getEmail())))
+        jsonObject.put("streamName", Encrypt.getName())
+        jsonObject.put("signature", Encrypt.encryption(Encrypt.hash(Encrypt.getName())))
 
         // Convert JSONObject to String
         val jsonObjectString = jsonObject.toString()

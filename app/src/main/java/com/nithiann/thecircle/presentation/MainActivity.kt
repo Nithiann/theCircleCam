@@ -74,6 +74,8 @@ class MainActivity : ComponentActivity() {
         }
         super.onCreate(savedInstanceState)
 
+        PrintInstalledCertificates()
+
         Encrypt.getName()
 
         setContent {
