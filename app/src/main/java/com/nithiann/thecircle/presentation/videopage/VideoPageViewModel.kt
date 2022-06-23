@@ -4,9 +4,11 @@ import android.os.Message
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.nithiann.thecircle.common.Resource
 import com.nithiann.thecircle.domain.use_case.getMessagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
@@ -34,6 +36,6 @@ class VideoPageViewModel @Inject constructor(
                     _state.value = VideoState(isLoading = true)
                 }
             }
-        }
+        }.launchIn(viewModelScope)
     }
 }

@@ -8,24 +8,31 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.core.graphics.PathUtils
+import androidx.activity.compose.setContent
+import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.nithiann.thecircle.R
 import com.nithiann.thecircle.common.PathUtils.updateGallery
+import com.nithiann.thecircle.domain.repository.MessageRepository
 import com.nithiann.thecircle.domain.use_case.getMessagesUseCase
+import com.nithiann.thecircle.infrastructure.remote.Api
+import com.nithiann.thecircle.infrastructure.remote.Encrypt
+import com.nithiann.thecircle.infrastructure.repository.MessageRepositoryImpl
 import com.pedro.rtplibrary.rtmp.RtmpCamera1
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-
-class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickListener  {
+@AndroidEntryPoint
+class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickListener {
     var rtmpCamera: RtmpCamera1? = null
     var sButton: Button? = null
     var streamButton: Button? = null
     //@SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(com.nithiann.thecircle.R.layout.texture_layout)
         val connectCheckerRtmp: ConnectCheckerRtmp = ConnectCheckerRtmp()
@@ -36,7 +43,21 @@ class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickLi
         streamButton!!.setOnClickListener(this)
         rtmpCamera = RtmpCamera1(openGlView, connectCheckerRtmp)
         openGlView.holder.addCallback(this);
+        setContent { MessageScreen() }
+        //this.getMessages()
         //openGlView.setOnTouchListener(this);
+    }
+
+    @Composable
+    fun MessageScreen(viewModel: VideoPageViewModel = hiltViewModel()) {
+        val state = viewModel.state.value
+
+        println(state)
+
+        state.messages?.forEach { message ->
+         println("hello wolrd")
+        //println(message)
+        }
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
@@ -84,6 +105,10 @@ class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickLi
 
     private fun getMessages() {
 
+        val hashed = Encrypt.hash(Encrypt.getEmail())
+        val encrypted = Encrypt.encryption(hashed)
+        val encoded = Encrypt.encodeHREF(encrypted)
+        //repo.getMessages(Encrypt.getEmail(), encoded)
     }
 
 }

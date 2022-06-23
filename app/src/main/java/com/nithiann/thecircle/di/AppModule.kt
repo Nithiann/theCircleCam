@@ -3,6 +3,7 @@ package com.nithiann.thecircle.di
 import com.nithiann.thecircle.common.Constants
 import com.nithiann.thecircle.domain.repository.AboutRepository
 import com.nithiann.thecircle.domain.repository.MessageRepository
+import com.nithiann.thecircle.domain.use_case.getMessagesUseCase
 import com.nithiann.thecircle.infrastructure.remote.Api
 import com.nithiann.thecircle.infrastructure.repository.AboutRepositoryImpl
 import com.nithiann.thecircle.infrastructure.repository.MessageRepositoryImpl
@@ -41,6 +42,13 @@ object AppModule {
     fun provideMessagesRepository(api: Api): MessageRepository {
         return MessageRepositoryImpl(api)
     }
+
+    @Provides
+    @Singleton
+    fun provideUseCaseGetMessages(repository: MessageRepository): getMessagesUseCase {
+        return getMessagesUseCase(repository)
+    }
+
 
     @Provides
     @Singleton

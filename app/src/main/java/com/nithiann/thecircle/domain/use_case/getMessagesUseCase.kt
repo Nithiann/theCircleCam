@@ -38,7 +38,7 @@ class getMessagesUseCase @Inject constructor(
     }
 
     private fun getStreamerEmail(): String {
-        return Constants.tmpStreamerEmail
+        return Encrypt.getEmail()
     }
 
     private fun getSignature(): String {
