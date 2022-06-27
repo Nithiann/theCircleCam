@@ -25,6 +25,7 @@ class MessageFragment: Fragment() {
     private lateinit var viewModel: VideoPageViewModel
     private lateinit var textView: TextView
 
+    // TODO: make sure data is filled with messages
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
