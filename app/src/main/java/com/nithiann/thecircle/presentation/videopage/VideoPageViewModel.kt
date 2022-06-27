@@ -16,6 +16,7 @@ import javax.inject.Inject
 class VideoPageViewModel @Inject constructor(
     private val getMessagesUseCase: getMessagesUseCase
 ): ViewModel() {
+
     private val _state = mutableStateOf(VideoState())
     val state: State<VideoState> = _state
 
@@ -24,15 +25,20 @@ class VideoPageViewModel @Inject constructor(
     }
 
     private fun getMessages() {
+        println("getting messages")
         getMessagesUseCase().onEach { result ->
+            println(result)
             when(result) {
                 is Resource.Success -> {
-                    _state.value = VideoState(messages =  result.data ?: null)
+                    println("result success: "+ result)
+                    _state.value = VideoState(messages = (result.data ?: null) as List<com.nithiann.thecircle.domain.models.Message>?)
                 }
                 is Resource.Error -> {
-                    _state.value = VideoState(error = result.message ?: "An error has occured")
+                    println("result error: "+ result)
+                    _state.value = VideoState(error = result.response ?: "An error has occured")
                 }
                 is Resource.Loading -> {
+                    println("result loading: "+ result)
                     _state.value = VideoState(isLoading = true)
                 }
             }

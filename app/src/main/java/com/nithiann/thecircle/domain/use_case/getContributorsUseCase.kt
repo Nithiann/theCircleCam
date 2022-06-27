@@ -13,7 +13,7 @@ import javax.inject.Inject
 class getContributorsUseCase @Inject constructor(
     private val repository: AboutRepository
 ) {
-    operator fun invoke() : Flow<Resource<List<Contributor>>> = flow {
+    operator fun invoke() : Flow<Resource<out Any>> = flow {
         try {
             // start loading
             emit(Resource.Loading())

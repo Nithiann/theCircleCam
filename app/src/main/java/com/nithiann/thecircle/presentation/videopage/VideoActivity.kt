@@ -52,7 +52,6 @@ class VideoActivity: FragmentActivity(), SurfaceHolder.Callback, View.OnClickLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContent { MessageScreen() }
         setContentView(com.nithiann.thecircle.R.layout.texture_layout)
         val connectCheckerRtmp: ConnectCheckerRtmp = ConnectCheckerRtmp()
         val openGlView: SurfaceView = findViewById(com.nithiann.thecircle.R.id.surfaceView)
@@ -66,18 +65,6 @@ class VideoActivity: FragmentActivity(), SurfaceHolder.Callback, View.OnClickLis
 
         //this.getMessages()
         //openGlView.setOnTouchListener(this);
-    }
-
-    @Composable
-    fun MessageScreen(viewModel: VideoPageViewModel = hiltViewModel()) {
-        val state = viewModel.state.value
-
-        println(state)
-        Modifier.alpha(0f)
-        state.messages?.forEach { message ->
-         println("hello wolrd")
-        //println(message)
-        }
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
