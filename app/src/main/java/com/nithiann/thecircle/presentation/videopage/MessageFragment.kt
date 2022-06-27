@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.nithiann.thecircle.R
-import com.nithiann.thecircle.databinding.MessageFragmentBinding
+
 
 class MessageFragment: Fragment() {
 
@@ -15,9 +16,8 @@ class MessageFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val binding = DataBindingUtil.inflate<MessageFragmentBinding>(inflater,
-            R.layout.message_fragment,container,false)
-        return binding.root
+    ): View {
+        return inflater!!.inflate(R.layout.message_fragment, container, false)
     }
+
 }

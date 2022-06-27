@@ -13,6 +13,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentTransaction
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.gson.GsonBuilder
 import com.nithiann.thecircle.R
@@ -40,7 +43,7 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickListener {
+class VideoActivity: FragmentActivity(), SurfaceHolder.Callback, View.OnClickListener {
     var rtmpCamera: RtmpCamera1? = null
     var sButton: Button? = null
     var streamButton: Button? = null

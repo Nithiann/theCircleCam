@@ -1,57 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_example_rtmp"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.videopage.VideoActivity"
-    >
-
-    <com.pedro.rtplibrary.view.OpenGlView
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_example_rtmp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/surfaceView"
-        app:keepAspectRatio="true"
-        app:aspectRatioMode="adjust"
-        app:AAEnabled="false"
-        app:numFilters="1"
-        app:isFlipHorizontal="false"
-        app:isFlipVertical="false"
-        />
+        tools:context=".presentation.videopage.VideoActivity"
+        >
 
-    <Button
-        android:id="@+id/b_start_stop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:text="Stream"
-        android:textSize="20dp"
-        android:textColor="@color/gray"
-        android:background="@drawable/button_shape"
-        android:gravity="center"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingClass,MissingConstraints"
-        tools:layout_editor_absoluteX="161dp" />
+        <com.pedro.rtplibrary.view.OpenGlView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/surfaceView"
+            app:keepAspectRatio="true"
+            app:aspectRatioMode="adjust"
+            app:AAEnabled="false"
+            app:numFilters="1"
+            app:isFlipHorizontal="false"
+            app:isFlipVertical="false"
+            />
 
-    <Button
-        android:id="@+id/switch_camera"
-        android:layout_width="51dp"
-        android:layout_height="50dp"
-        android:background="@drawable/ic_switch_camera_blue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@id/b_start_stop"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingClass" />
+        <Button
+            android:id="@+id/b_start_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="Stream"
+            android:textSize="20dp"
+            android:textColor="@color/gray"
+            android:background="@drawable/button_shape"
+            android:gravity="center"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="MissingClass,MissingConstraints"
+            tools:layout_editor_absoluteX="161dp" />
 
-    <androidx.fragment.app.FragmentContainerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/messageFragment"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <fragment
+            android:id="@+id/messageFragment"
+            android:name="com.nithiann.thecircle.presentation.videopage.MessageFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/switch_camera"
+            android:layout_width="51dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_switch_camera_blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/b_start_stop"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingClass" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>

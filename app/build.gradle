@@ -92,6 +92,13 @@ dependencies {
     // Integration with observables
     implementation("androidx.compose.runtime:runtime-livedata:1.1.1")
     implementation("androidx.compose.runtime:runtime-rxjava2:1.1.1")
+    def fragment_version = "1.4.1"
+
+    // Java language implementation
+    implementation "androidx.fragment:fragment:$fragment_version"
+    // Kotlin
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+
 
     // UI Tests
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.1.1")
