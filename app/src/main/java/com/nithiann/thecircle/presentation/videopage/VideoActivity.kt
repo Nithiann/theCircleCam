@@ -23,6 +23,7 @@ import com.nithiann.thecircle.domain.use_case.getMessagesUseCase
 import com.nithiann.thecircle.infrastructure.remote.Api
 import com.nithiann.thecircle.infrastructure.remote.Encrypt
 import com.nithiann.thecircle.infrastructure.repository.MessageRepositoryImpl
+import com.nithiann.thecircle.presentation.videopage.VideoPageViewModel
 import com.pedro.rtplibrary.rtmp.RtmpCamera1
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -43,6 +44,7 @@ class VideoActivity: ComponentActivity(), SurfaceHolder.Callback, View.OnClickLi
     var rtmpCamera: RtmpCamera1? = null
     var sButton: Button? = null
     var streamButton: Button? = null
+    private lateinit var stream: VideoPageViewModel
     //@SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
