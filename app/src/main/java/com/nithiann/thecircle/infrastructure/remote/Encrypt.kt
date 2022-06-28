@@ -39,10 +39,9 @@ object Encrypt {
                     val cert = ks.getCertificate(alias) as X509Certificate
                     //To print User Certs only
                     if (alias.contains("user")) {
-                        println(alias)
-                        println(
-                            cert.issuerDN.name.toString().substringAfter(",").substringAfter("=").substringBefore(",").substringBefore(" ")
-                        )
+//                        println(
+//                            cert.issuerDN.name.toString().substringAfter(",").substringAfter("=").substringBefore(",").substringBefore(" ")
+//                        )
                         return cert.issuerDN.name.toString().substringAfter(",").substringAfter("=").substringBefore(",").substringBefore(" ")
                     }
 
@@ -72,12 +71,12 @@ object Encrypt {
                     //To print User Certs only
                     if (alias.contains("user")) {
                         println(alias)
-                        println(
-                            cert.subjectDN
-                                .toString()
-                                .substringAfter("=")
-                                .substringBefore(",")
-                        )
+//                        println(
+//                            cert.subjectDN
+//                                .toString()
+//                                .substringAfter("=")
+//                                .substringBefore(",")
+//                        )
                          return cert.subjectDN
                              .toString()
                              .substringAfter("=")
@@ -98,7 +97,7 @@ object Encrypt {
         return "";
     }
 
-    fun encryption (input: ByteArray): String {
+    fun sign (input: ByteArray): String {
         lateinit var cert: X509Certificate
         val keyStore = getKeyStore()
         val ks = getCAStore()
@@ -115,6 +114,10 @@ object Encrypt {
         val par = String(Base64.getEncoder().encode(ciphertext))
         println(par)
         return par
+    }
+
+    fun verify(signature: String, publicKey: String) {
+
     }
 
     fun encodeHREF(input: String): String {

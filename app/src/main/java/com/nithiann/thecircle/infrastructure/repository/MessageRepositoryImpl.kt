@@ -8,7 +8,7 @@ import javax.inject.Inject
 class MessageRepositoryImpl @Inject constructor(
     private val api: Api
 ): MessageRepository {
-    override suspend fun getMessages(streamerEmail: String, signature: String): List<MessageDTO> {
-        return api.getMessages(streamerEmail, signature);
+    override suspend fun getMessages(senderEmail: String, streamerEmail: String, signature: String): Boolean {
+       return true
     }
 }

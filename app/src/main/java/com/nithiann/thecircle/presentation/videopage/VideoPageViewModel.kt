@@ -1,12 +1,13 @@
 package com.nithiann.thecircle.presentation.videopage
 
-import android.os.Message
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nithiann.thecircle.common.Resource
+import com.nithiann.thecircle.domain.models.MessageList
 import com.nithiann.thecircle.domain.use_case.getMessagesUseCase
+import com.nithiann.thecircle.infrastructure.remote.dto.MessageListDTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -31,7 +32,7 @@ class VideoPageViewModel @Inject constructor(
             when(result) {
                 is Resource.Success -> {
                     println("result success: "+ result)
-                    _state.value = VideoState(messages = (result.data ?: null) as List<com.nithiann.thecircle.domain.models.Message>?)
+                    _state.value = VideoState(messages = result.data)
                 }
                 is Resource.Error -> {
                     println("result error: "+ result)

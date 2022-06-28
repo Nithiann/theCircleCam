@@ -1,23 +1,14 @@
 package com.nithiann.thecircle.presentation.videopage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.compose.runtime.State
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
 import com.nithiann.thecircle.R
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Exception
 
 
 @AndroidEntryPoint
@@ -34,9 +25,12 @@ class MessageFragment: Fragment() {
         textView = inflater.findViewById(R.id.messageText)
         viewModel = ViewModelProvider(activity!!).get(VideoPageViewModel::class.java)
         val chat = viewModel.state.value
-        chat.messages?.forEach { message ->
+        chat.messages?.messages?.forEach() { message ->
             println(message ?: "no message")
+            textView.text = message.msg
+            println("+++++++++++++12345 " + message.msg)
         }
+        //println("+++++++++++++-=-=-=- " + chat)
         return inflater
 
     }
@@ -44,6 +38,17 @@ class MessageFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+    }
 
+    override fun onStart() {
+        super.onStart()
+        val chat = viewModel.state.value
+        chat.messages?.messages?.forEach() { message ->
+            println(message ?: "no message")
+            textView.text = message.msg
+            println("+++++++++++++12345 " + message.msg)
+        }
+        println("+++++++++++++-=-=-=- " + chat)
+        textView.text = chat.toString()
     }
 }

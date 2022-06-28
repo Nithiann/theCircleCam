@@ -77,6 +77,12 @@ class MainActivity : ComponentActivity() {
         PrintInstalledCertificates()
 
         Encrypt.getName()
+        val users = Constants.users
+        for (user in users) {
+            println("Hardcoded users: " + user.name)
+        }
+
+
 
         setContent {
             Column() {
@@ -224,18 +230,10 @@ class MainActivity : ComponentActivity() {
                 while (aliases.hasMoreElements()) {
                     val alias = aliases.nextElement() as String
                     val cert = ks.getCertificate(alias) as X509Certificate
-                    //To print System Certs only
-                    if (cert.issuerDN.name.contains("system")) {
-                        println(cert.issuerDN.name)
-                    }
-
                     //To print User Certs only
                     if (cert.issuerDN.name.contains("user")) {
                         println(cert)
                     }
-
-                    //To print all certs
-                    println(cert.issuerDN.name)
                 }
             }
         } catch (e: IOException) {

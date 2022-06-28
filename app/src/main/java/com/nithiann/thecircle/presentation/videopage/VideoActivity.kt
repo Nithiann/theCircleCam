@@ -8,25 +8,11 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentTransaction
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.gson.GsonBuilder
 import com.nithiann.thecircle.R
 import com.nithiann.thecircle.common.Constants
-import com.nithiann.thecircle.common.PathUtils.updateGallery
-import com.nithiann.thecircle.domain.repository.MessageRepository
-import com.nithiann.thecircle.domain.use_case.getMessagesUseCase
-import com.nithiann.thecircle.infrastructure.remote.Api
 import com.nithiann.thecircle.infrastructure.remote.Encrypt
-import com.nithiann.thecircle.infrastructure.repository.MessageRepositoryImpl
-import com.nithiann.thecircle.presentation.videopage.VideoPageViewModel
 import com.pedro.rtplibrary.rtmp.RtmpCamera1
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -34,13 +20,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import java.io.IOException
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
-import java.text.SimpleDateFormat
-import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class VideoActivity: FragmentActivity(), SurfaceHolder.Callback, View.OnClickListener {
@@ -117,7 +99,7 @@ class VideoActivity: FragmentActivity(), SurfaceHolder.Callback, View.OnClickLis
         // Create JSON using JSONObject
         val jsonObject = JSONObject()
         jsonObject.put("streamName", Encrypt.getName())
-        jsonObject.put("signature", Encrypt.encryption(Encrypt.hash(Encrypt.getName())))
+        jsonObject.put("signature", Encrypt.sign(Encrypt.hash(Encrypt.getName())))
 
         // Convert JSONObject to String
         val jsonObjectString = jsonObject.toString()
@@ -160,7 +142,7 @@ class VideoActivity: FragmentActivity(), SurfaceHolder.Callback, View.OnClickLis
         // Create JSON using JSONObject
         val jsonObject = JSONObject()
         jsonObject.put("streamName", Encrypt.getName())
-        jsonObject.put("signature", Encrypt.encryption(Encrypt.hash(Encrypt.getName())))
+        jsonObject.put("signature", Encrypt.sign(Encrypt.hash(Encrypt.getName())))
 
         // Convert JSONObject to String
         val jsonObjectString = jsonObject.toString()
