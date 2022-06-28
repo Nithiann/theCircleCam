@@ -99,10 +99,15 @@ object Encrypt {
     }
 
     fun encryption (input: ByteArray): String {
+        lateinit var cert: X509Certificate
         val keyStore = getKeyStore()
         val ks = getCAStore()
-        val certificate = ks.getCertificate("user:6685520c.0")
-        keyStore.setKeyEntry("key", privKey, null, arrayOf(certificate))
+        val aliases: Enumeration<String> = ks.aliases()
+        while (aliases.hasMoreElements()) {
+            val alias = aliases.nextElement() as String
+            cert = ks.getCertificate(alias) as X509Certificate
+        }
+        keyStore.setKeyEntry("key", privKey, null, arrayOf(cert))
         val signature = Signature.getInstance("NONEwithRSA")
         signature.initSign(privKey)
         signature.update(input)
