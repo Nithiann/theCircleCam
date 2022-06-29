@@ -55,26 +55,25 @@ class MessageFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(activity)
-
-            val mList: List<Message> = listOf(Message(1, "send help", "hello world", 2, 2), Message(2, "to Amber", "hello world", 1, 1), Message(3, ":<", "hello world", 2, 2))
-            adapter = MessageAdapter(mList)
-        }
+        val chat = viewModel.state.value
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.value
             }
         }
-
     }
 
     override fun onStart() {
         super.onStart()
         val chat = viewModel.state.value
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(activity)
+            if(chat.messages != null) {
+                val mList: List<Message> = chat.messages!!.messages
+                adapter = MessageAdapter(mList)
+            }
+        }
         chat.messages?.messages?.forEach() { message ->
             println(message ?: "no message")
             textView.text = message.msg
