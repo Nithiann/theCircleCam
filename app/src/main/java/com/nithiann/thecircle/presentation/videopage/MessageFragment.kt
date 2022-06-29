@@ -1,30 +1,26 @@
 package com.nithiann.thecircle.presentation.videopage
 
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nithiann.thecircle.R
-import com.nithiann.thecircle.common.Resource
 import com.nithiann.thecircle.domain.models.Message
 import com.nithiann.thecircle.domain.models.MessageList
-import com.nithiann.thecircle.domain.use_case.getMessagesUseCase
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 
+@Suppress("DEPRECATION")
 @AndroidEntryPoint
 class MessageFragment: Fragment() {
     private lateinit var viewModel: VideoPageViewModel
@@ -62,12 +58,11 @@ class MessageFragment: Fragment() {
 
     override fun onStart() {
         super.onStart()
+
         val chat = viewModel.state.value
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
-
-            val mList: List<Message> = listOf(Message(1, "send help", "hello world", 2, 2), Message(2, "to Amber", "hello world", 1, 1), Message(3, ":<", "hello world", 2, 2))
-            val messageList = MessageList(mList, "123123123")
+            println("-=-=-=-=-=-=-=-=-=-=-=-=-=- " + chat.messages)
             adapter = MessageAdapter(chat.messages)
             adapter?.notifyDataSetChanged()
         }

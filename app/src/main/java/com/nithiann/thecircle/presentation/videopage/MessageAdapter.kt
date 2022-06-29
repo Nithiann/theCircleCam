@@ -11,6 +11,7 @@ import com.nithiann.thecircle.domain.models.MessageList
 
 class MessageAdapter(private val mList: MessageList?): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var messageItem: TextView;
+    private lateinit var messageSender: TextView;
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -21,6 +22,7 @@ class MessageAdapter(private val mList: MessageList?): RecyclerView.Adapter<Recy
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val ItemsViewModelMessages = mList!!.messages[position]
         messageItem.text = ItemsViewModelMessages.msg
+        messageSender.text = ItemsViewModelMessages.sendByUserId.toString()
     }
 
     override fun getItemCount(): Int {
@@ -31,6 +33,7 @@ class MessageAdapter(private val mList: MessageList?): RecyclerView.Adapter<Recy
 
         init {
             messageItem = itemView.findViewById(R.id.textView_msg_card)
+            messageSender = itemView.findViewById(R.id.textView_name_card)
         }
     }
 
