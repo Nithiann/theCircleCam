@@ -19,13 +19,15 @@ class getMessagesUseCase @Inject constructor(
     operator fun invoke() : Flow<Resource<MessageList>> = flow {
         try {
             // start loading
-            emit(Resource.Loading())
+
             val messages = repository.getMessageList(getStreamerEmail(), getStreamerEmail(), getSignature()).let { it ->
                 it.toMessageList()
             }
+
             Log.i("getMessagesUseCase - invoke", messages.toString())
             emit(Resource.Success(messages!!))
         } catch (e: HttpException) {
+            emit(Resource.Loading())
             emit(Resource.Error(e.localizedMessage ?: "An expected error occured"))
         } catch (e: IOException) {
             emit(Resource.Error(e.localizedMessage ?: "Couldn't reach server. Please try again later."))
@@ -38,9 +40,8 @@ class getMessagesUseCase @Inject constructor(
     }
 
     private fun getSignature(): String {
-        println("------------------------ " + Encrypt.getEmail()+Encrypt.getEmail())
         val hashed = Encrypt.hash(Encrypt.getEmail()+Encrypt.getEmail())
-        println("Hashed: " + hashed)
+        //println("Hashed: " + hashed)
         val encrypted = Encrypt.sign(hashed)
         println("Encrypted: " + encrypted)
         val encryptedURL = Encrypt.encodeHREF(encrypted)
