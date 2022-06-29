@@ -97,8 +97,9 @@ class VideoActivity: FragmentActivity(), SurfaceHolder.Callback, View.OnClickLis
     private fun startStreaming(){
 
         val jsonObject = JSONObject()
+        jsonObject.put("senderEmail", Encrypt.getEmail())
         jsonObject.put("streamName", Encrypt.getName())
-        jsonObject.put("signature", Encrypt.sign(Encrypt.hash(Encrypt.getName())))
+        jsonObject.put("signature", Encrypt.sign(Encrypt.hash(Encrypt.getEmail() + Encrypt.getName())))
 
         val jsonObjectString = jsonObject.toString()
 
@@ -135,8 +136,9 @@ class VideoActivity: FragmentActivity(), SurfaceHolder.Callback, View.OnClickLis
     private fun stopStreaming(){
 
         val jsonObject = JSONObject()
+        jsonObject.put("senderEmail", Encrypt.getEmail())
         jsonObject.put("streamName", Encrypt.getName())
-        jsonObject.put("signature", Encrypt.sign(Encrypt.hash(Encrypt.getName())))
+        jsonObject.put("signature", Encrypt.sign(Encrypt.hash(Encrypt.getEmail() + Encrypt.getName())))
 
         val jsonObjectString = jsonObject.toString()
 
