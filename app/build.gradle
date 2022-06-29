@@ -95,7 +95,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.1.1")
     implementation("androidx.compose.runtime:runtime-rxjava2:1.1.1")
     def fragment_version = "1.4.1"
-    def lifecycle_version = "2.3.1"
+    def lifecycle_version = "2.4.1"
 
     def arch_version = "2.1.0"
     // Java language implementation
@@ -114,6 +114,13 @@ dependencies {
 // Lifecycles only (without ViewModel or LiveData)
 
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+
+    // optional - helpers for implementing LifecycleOwner in a Service
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
+
+    // optional - ProcessLifecycleOwner provides a lifecycle for the whole application process
+    implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
+
 
 // architecture Lifecycle extensions
 

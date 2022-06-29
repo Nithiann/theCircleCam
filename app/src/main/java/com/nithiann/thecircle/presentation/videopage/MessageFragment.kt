@@ -1,14 +1,12 @@
 package com.nithiann.thecircle.presentation.videopage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.compose.runtime.State
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.*
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
@@ -21,7 +19,7 @@ import com.nithiann.thecircle.R
 import com.nithiann.thecircle.domain.models.Message
 import com.nithiann.thecircle.domain.use_case.getMessagesUseCase
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Exception
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -57,9 +55,14 @@ class MessageFragment: Fragment() {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
 
-            val mList: List<Message> = listOf(Message(1, "send help", 2, 2), Message(2, "to Amber", 2, 2), Message(3, ":<", 2, 2))
+            val mList: List<Message> = listOf(Message(1, "send help", "hello world", 2, 2), Message(2, "to Amber", "hello world", 1, 1), Message(3, ":<", "hello world", 2, 2))
             adapter = MessageAdapter(mList)
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.value
+            }
+        }
     }
 }
