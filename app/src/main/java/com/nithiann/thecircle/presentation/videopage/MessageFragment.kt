@@ -30,7 +30,6 @@ class MessageFragment: Fragment() {
             textView.text = message.msg
             println("+++++++++++++12345 " + message.msg)
         }
-        //println("+++++++++++++-=-=-=- " + chat)
         return inflater
 
     }
