@@ -15,7 +15,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.nithiann.thecircle.R
+import com.nithiann.thecircle.domain.models.Message
+import com.nithiann.thecircle.domain.use_case.getMessagesUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
 
@@ -24,6 +28,10 @@ import java.lang.Exception
 class MessageFragment: Fragment() {
     private lateinit var viewModel: VideoPageViewModel
     private lateinit var textView: TextView
+    private lateinit var recyclerView: RecyclerView
+
+    private var layoutManager: RecyclerView.LayoutManager? = null
+    private var adapter: RecyclerView.Adapter<MessageAdapter.ViewHolder>? = null
 
     // TODO: make sure data is filled with messages
     override fun onCreateView(
@@ -33,6 +41,7 @@ class MessageFragment: Fragment() {
     ): View {
         val inflater = inflater!!.inflate(R.layout.message_fragment, container, false)
         textView = inflater.findViewById(R.id.messageText)
+        recyclerView = inflater.findViewById(R.id.recycler_view)
         viewModel = ViewModelProvider(activity!!).get(VideoPageViewModel::class.java)
         val chat = viewModel.state.value
         chat.messages?.forEach { message ->
@@ -45,6 +54,12 @@ class MessageFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(activity)
+
+            val mList: List<Message> = listOf(Message(1, "send help", 2, 2), Message(2, "to Amber", 2, 2), Message(3, ":<", 2, 2))
+            adapter = MessageAdapter(mList)
+        }
 
     }
 }
