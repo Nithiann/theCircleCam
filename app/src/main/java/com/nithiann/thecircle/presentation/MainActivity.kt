@@ -76,7 +76,6 @@ class MainActivity : ComponentActivity() {
 
         PrintInstalledCertificates()
 
-        Encrypt.getName()
         val users = Constants.users
         for (user in users) {
             println("Hardcoded users: " + user.name)
