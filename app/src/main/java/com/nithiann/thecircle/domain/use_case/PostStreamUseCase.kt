@@ -4,7 +4,6 @@ import com.nithiann.thecircle.common.Resource
 import com.nithiann.thecircle.domain.models.StreamCheck
 import com.nithiann.thecircle.domain.repository.StreamRepository
 import com.nithiann.thecircle.infrastructure.remote.Encrypt
-import com.nithiann.thecircle.infrastructure.remote.dto.toContributor
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.Flow
 import retrofit2.HttpException
@@ -15,7 +14,7 @@ class PostStreamUseCase @Inject constructor(
     private val repository: StreamRepository
 ) {
     operator fun invoke(): Flow<Resource<out Any>> = flow {
-       val streamer: StreamCheck = StreamCheck(Encrypt.getEmail(), Encrypt.encryption(Encrypt.hash(Encrypt.getEmail())))
+       val streamer: StreamCheck = StreamCheck(Encrypt.getEmail(), Encrypt.sign(Encrypt.hash(Encrypt.getEmail())))
         try {
             // start loading
             emit(Resource.Loading())

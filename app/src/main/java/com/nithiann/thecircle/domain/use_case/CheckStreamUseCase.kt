@@ -4,7 +4,6 @@ import com.nithiann.thecircle.common.Resource
 import com.nithiann.thecircle.domain.models.StreamCheck
 import com.nithiann.thecircle.domain.repository.StreamRepository
 import com.nithiann.thecircle.infrastructure.remote.Encrypt
-import com.nithiann.thecircle.infrastructure.remote.dto.toContributor
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -16,7 +15,7 @@ class CheckStreamUseCase @Inject constructor(
 ) {
     operator fun invoke() : Flow<Resource<out Any>> = flow {
         val streamer: StreamCheck = StreamCheck(
-            Encrypt.getEmail(), Encrypt.encryption(
+            Encrypt.getEmail(), Encrypt.sign(
                 Encrypt.hash(
                     Encrypt.getEmail()
                 )

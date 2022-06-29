@@ -8,25 +8,11 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentTransaction
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.gson.GsonBuilder
 import com.nithiann.thecircle.R
 import com.nithiann.thecircle.common.Constants
-import com.nithiann.thecircle.common.PathUtils.updateGallery
-import com.nithiann.thecircle.domain.repository.MessageRepository
-import com.nithiann.thecircle.domain.use_case.getMessagesUseCase
-import com.nithiann.thecircle.infrastructure.remote.Api
 import com.nithiann.thecircle.infrastructure.remote.Encrypt
-import com.nithiann.thecircle.infrastructure.repository.MessageRepositoryImpl
-import com.nithiann.thecircle.presentation.videopage.VideoPageViewModel
 import com.pedro.rtplibrary.rtmp.RtmpCamera1
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -34,13 +20,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import java.io.IOException
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
-import java.text.SimpleDateFormat
-import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class VideoActivity: FragmentActivity(), SurfaceHolder.Callback, View.OnClickListener {
@@ -114,36 +96,32 @@ class VideoActivity: FragmentActivity(), SurfaceHolder.Callback, View.OnClickLis
 
     private fun startStreaming(){
 
-        // Create JSON using JSONObject
         val jsonObject = JSONObject()
+        jsonObject.put("senderEmail", Encrypt.getEmail())
         jsonObject.put("streamName", Encrypt.getName())
-        jsonObject.put("signature", Encrypt.encryption(Encrypt.hash(Encrypt.getName())))
+        jsonObject.put("signature", Encrypt.sign(Encrypt.hash(Encrypt.getEmail() + Encrypt.getName())))
 
-        // Convert JSONObject to String
         val jsonObjectString = jsonObject.toString()
 
         GlobalScope.launch(Dispatchers.IO) {
             val url = URL(Constants.BASE_URL2 + "api/Stream")
             val httpURLConnection = url.openConnection() as HttpURLConnection
             httpURLConnection.requestMethod = "POST"
-            httpURLConnection.setRequestProperty("Content-Type", "application/json") // The format of the content we're sending to the server
-            httpURLConnection.setRequestProperty("Accept", "application/json") // The format of response we want to get from the server
+            httpURLConnection.setRequestProperty("Content-Type", "application/json")
+            httpURLConnection.setRequestProperty("Accept", "application/json")
             httpURLConnection.doInput = true
             httpURLConnection.doOutput = true
 
-            // Send the JSON we created
             val outputStreamWriter = OutputStreamWriter(httpURLConnection.outputStream)
             outputStreamWriter.write(jsonObjectString)
             outputStreamWriter.flush()
 
-            // Check if the connection is successful
             val responseCode = httpURLConnection.responseCode
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 val response = httpURLConnection.inputStream.bufferedReader()
-                    .use { it.readText() }  // defaults to UTF-8
+                    .use { it.readText() }
                 withContext(Dispatchers.Main) {
 
-                    // Convert raw JSON to pretty JSON using GSON library
                     val gson = GsonBuilder().setPrettyPrinting().create()
                     val prettyJson = gson.toJson(response)
                     Log.d("Pretty Printed JSON :", prettyJson)
@@ -157,36 +135,32 @@ class VideoActivity: FragmentActivity(), SurfaceHolder.Callback, View.OnClickLis
 
     private fun stopStreaming(){
 
-        // Create JSON using JSONObject
         val jsonObject = JSONObject()
+        jsonObject.put("senderEmail", Encrypt.getEmail())
         jsonObject.put("streamName", Encrypt.getName())
-        jsonObject.put("signature", Encrypt.encryption(Encrypt.hash(Encrypt.getName())))
+        jsonObject.put("signature", Encrypt.sign(Encrypt.hash(Encrypt.getEmail() + Encrypt.getName())))
 
-        // Convert JSONObject to String
         val jsonObjectString = jsonObject.toString()
 
         GlobalScope.launch(Dispatchers.IO) {
             val url = URL(Constants.BASE_URL2 + "api/Stream/end")
             val httpURLConnection = url.openConnection() as HttpURLConnection
             httpURLConnection.requestMethod = "PUT"
-            httpURLConnection.setRequestProperty("Content-Type", "application/json") // The format of the content we're sending to the server
-            httpURLConnection.setRequestProperty("Accept", "application/json") // The format of response we want to get from the server
+            httpURLConnection.setRequestProperty("Content-Type", "application/json")
+            httpURLConnection.setRequestProperty("Accept", "application/json")
             httpURLConnection.doInput = true
             httpURLConnection.doOutput = true
 
-            // Send the JSON we created
             val outputStreamWriter = OutputStreamWriter(httpURLConnection.outputStream)
             outputStreamWriter.write(jsonObjectString)
             outputStreamWriter.flush()
 
-            // Check if the connection is successful
             val responseCode = httpURLConnection.responseCode
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 val response = httpURLConnection.inputStream.bufferedReader()
-                    .use { it.readText() }  // defaults to UTF-8
+                    .use { it.readText() }
                 withContext(Dispatchers.Main) {
 
-                    // Convert raw JSON to pretty JSON using GSON library
                     val gson = GsonBuilder().setPrettyPrinting().create()
                     val prettyJson = gson.toJson(response)
                     Log.d("Pretty Printed JSON :", prettyJson)

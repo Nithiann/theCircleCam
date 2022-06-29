@@ -21,17 +21,20 @@ import com.nithiann.thecircle.domain.use_case.getMessagesUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
 @AndroidEntryPoint
 class MessageFragment: Fragment() {
     private lateinit var viewModel: VideoPageViewModel
     private lateinit var textView: TextView
     private lateinit var recyclerView: RecyclerView
 
+
     private var layoutManager: RecyclerView.LayoutManager? = null
     private var adapter: RecyclerView.Adapter<MessageAdapter.ViewHolder>? = null
 
     // TODO: make sure data is filled with messages
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,15 +45,17 @@ class MessageFragment: Fragment() {
         recyclerView = inflater.findViewById(R.id.recycler_view)
         viewModel = ViewModelProvider(activity!!).get(VideoPageViewModel::class.java)
         val chat = viewModel.state.value
-        chat.messages?.forEach { message ->
+        chat.messages?.messages?.forEach() { message ->
             println(message ?: "no message")
+            textView.text = message.msg
+            println("+++++++++++++12345 " + message.msg)
         }
         return inflater
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -64,5 +69,18 @@ class MessageFragment: Fragment() {
                 viewModel.state.value
             }
         }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val chat = viewModel.state.value
+        chat.messages?.messages?.forEach() { message ->
+            println(message ?: "no message")
+            textView.text = message.msg
+            println("+++++++++++++12345 " + message.msg)
+        }
+        println("+++++++++++++-=-=-=- " + chat)
+        //textView.text = chat.toString()
     }
 }
