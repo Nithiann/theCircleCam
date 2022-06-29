@@ -1,5 +1,6 @@
 package com.nithiann.thecircle.domain.use_case
 
+import android.util.Log
 import com.nithiann.thecircle.common.Resource
 import com.nithiann.thecircle.domain.models.MessageList
 import com.nithiann.thecircle.domain.repository.MessageListRepository
@@ -22,7 +23,9 @@ class getMessagesUseCase @Inject constructor(
             val messages = repository.getMessageList(getStreamerEmail(), getStreamerEmail(), getSignature()).let { it ->
                 it.toMessageList()
             }
-            emit(Resource.Success(messages))
+
+            Log.i("getMessagesUseCase - invoke", messages.toString())
+            emit(Resource.Success(messages!!))
         } catch (e: HttpException) {
             emit(Resource.Loading())
             emit(Resource.Error(e.localizedMessage ?: "An expected error occured"))

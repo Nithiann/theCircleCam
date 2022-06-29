@@ -1,5 +1,6 @@
 package com.nithiann.thecircle.presentation.videopage
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
@@ -12,10 +13,13 @@ import com.nithiann.thecircle.domain.models.MessageList
 import com.nithiann.thecircle.domain.use_case.getMessagesUseCase
 import com.nithiann.thecircle.infrastructure.remote.Encrypt
 import com.nithiann.thecircle.infrastructure.remote.dto.MessageListDTO
+import com.nithiann.thecircle.infrastructure.remote.dto.toMessageList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +31,7 @@ class VideoPageViewModel @Inject constructor(
 
     init {
         getMessages()
+        Log.i("VideoPageViewModel", "Has been created!")
     }
 
     private fun getMessages() {
@@ -53,4 +58,26 @@ class VideoPageViewModel @Inject constructor(
                 }
             }.launchIn(viewModelScope)
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.i("VideoPageViewModel", "Destroyed!")
+    }
+
+
+//    private fun invoke() {
+//        try {
+//            // start loading
+//            emit(Resource.Loading())
+//            val messages = repository.getMessageList(getStreamerEmail(), getStreamerEmail(), getSignature()).let { it ->
+//                it.toMessageList()
+//            }
+//            println("----------------------===------=== " + messages.signature)
+//            emit(Resource.Success(messages))
+//        } catch (e: HttpException) {
+//            emit(Resource.Error(e.localizedMessage ?: "An expected error occured"))
+//        } catch (e: IOException) {
+//            emit(Resource.Error(e.localizedMessage ?: "Couldn't reach server. Please try again later."))
+//        }
+//    }
 }
