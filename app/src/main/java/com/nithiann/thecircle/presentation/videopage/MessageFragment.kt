@@ -42,8 +42,10 @@ class MessageFragment: Fragment() {
         recyclerView = inflater.findViewById(R.id.recycler_view)
         viewModel = ViewModelProvider(activity!!).get(VideoPageViewModel::class.java)
         val chat = viewModel.state.value
-        chat.messages?.forEach { message ->
+        chat.messages?.messages?.forEach() { message ->
             println(message ?: "no message")
+            textView.text = message.msg
+            println("+++++++++++++12345 " + message.msg)
         }
         return inflater
 
@@ -54,6 +56,7 @@ class MessageFragment: Fragment() {
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
+    }
 
             val mList: List<Message> = listOf(Message(1, "send help", "hello world", 2, 2), Message(2, "to Amber", "hello world", 1, 1), Message(3, ":<", "hello world", 2, 2))
             adapter = MessageAdapter(mList)
@@ -64,5 +67,15 @@ class MessageFragment: Fragment() {
                 viewModel.state.value
             }
         }
+    override fun onStart() {
+        super.onStart()
+        val chat = viewModel.state.value
+        chat.messages?.messages?.forEach() { message ->
+            println(message ?: "no message")
+            textView.text = message.msg
+            println("+++++++++++++12345 " + message.msg)
+        }
+        println("+++++++++++++-=-=-=- " + chat)
+        textView.text = chat.toString()
     }
 }

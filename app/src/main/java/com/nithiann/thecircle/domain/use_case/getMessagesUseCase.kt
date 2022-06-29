@@ -1,11 +1,12 @@
 package com.nithiann.thecircle.domain.use_case
 
-import com.nithiann.thecircle.common.Constants
+import android.util.Log
 import com.nithiann.thecircle.common.Resource
-import com.nithiann.thecircle.domain.models.Message
-import com.nithiann.thecircle.domain.repository.MessageRepository
+import com.nithiann.thecircle.domain.models.MessageList
+import com.nithiann.thecircle.domain.repository.MessageListRepository
 import com.nithiann.thecircle.infrastructure.remote.Encrypt
-import com.nithiann.thecircle.infrastructure.remote.dto.toMessage
+import com.nithiann.thecircle.infrastructure.remote.dto.MessageListDTO
+import com.nithiann.thecircle.infrastructure.remote.dto.toMessageList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -13,14 +14,17 @@ import java.io.IOException
 import javax.inject.Inject
 
 class getMessagesUseCase @Inject constructor(
-    private val repository: MessageRepository,
+    private val repository: MessageListRepository,
 ) {
-    operator fun invoke() : Flow<Resource<out Any>> = flow {
+    operator fun invoke() : Flow<Resource<MessageList>> = flow {
         try {
             // start loading
             emit(Resource.Loading())
-            val messages = repository.getMessages(getStreamerEmail(), getSignature()).map { it.toMessage() }
-            emit(Resource.Success(messages))
+            val messages = repository.getMessageList(getStreamerEmail(), getStreamerEmail(), getSignature()).let { it ->
+                it.toMessageList()
+            }
+            Log.i("getMessagesUseCase - invoke", messages.toString())
+            emit(Resource.Success(messages!!))
         } catch (e: HttpException) {
             emit(Resource.Error(e.localizedMessage ?: "An expected error occured"))
         } catch (e: IOException) {
@@ -34,10 +38,10 @@ class getMessagesUseCase @Inject constructor(
     }
 
     private fun getSignature(): String {
-        val hashed = Encrypt.hash(Constants.tmpStreamerEmail)
+        println("------------------------ " + Encrypt.getEmail()+Encrypt.getEmail())
+        val hashed = Encrypt.hash(Encrypt.getEmail()+Encrypt.getEmail())
         println("Hashed: " + hashed)
-        val encrypted = Encrypt.encryption(hashed)
-        //val urlencoded = Encrypt.encodeHREF(encrypted)
+        val encrypted = Encrypt.sign(hashed)
         println("Encrypted: " + encrypted)
         val encryptedURL = Encrypt.encodeHREF(encrypted)
         println("EncryptedURL: " + encryptedURL)
