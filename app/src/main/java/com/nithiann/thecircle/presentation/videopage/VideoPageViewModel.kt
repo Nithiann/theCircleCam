@@ -22,6 +22,9 @@ class VideoPageViewModel @Inject constructor(
     private val getMessagesUseCase: getMessagesUseCase
 ): ViewModel() {
 
+
+    // TODO: make sure getMessages looks over time and not only when init
+    // TODO: update UI after getter is completed
     private val _state = mutableStateOf(VideoState())
     val state: State<VideoState> = _state
 
